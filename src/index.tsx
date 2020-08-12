@@ -7,7 +7,7 @@ import App from './components/App/App';
 import 'jquery/dist/jquery.js';
 import 'popper.js/dist/popper.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
-import '@fortawesome/fontawesome-free/css/fontawesome.css';
+import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
 
 
 ReactDOM.render(
