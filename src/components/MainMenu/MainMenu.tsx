@@ -43,7 +43,7 @@ export class MainMenu extends React.Component<MainMenuProperties> {
                 <Nav variant="tabs">
                     <HashRouter>
                     { 
-                        this.props.items.map(this.makeNavLink) 
+                        this.state.items.map(this.makeNavLink) 
                     }
                     </HashRouter>
                     
