@@ -1,11 +1,10 @@
 import React from 'react';
-import './App.css';
 import { Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 
 
-function App() {
+function HomePage() {
   return (
     <Container>
       
@@ -15,4 +14,4 @@ function App() {
   );
 }
 
-export default App;
+export default HomePage;
