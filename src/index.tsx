@@ -19,10 +19,7 @@ const menuItems = [
   new MainMenuItem("Home", "/"),  
   new MainMenuItem("Log in", "/login/"),
   new MainMenuItem("Contact", "/contact/"),
-  new MainMenuItem("Register", "/register/"),
-  new MainMenuItem("Cat 1", "/category/1/"),
-  new MainMenuItem("Cat 7", "/category/7/"),
-  
+  new MainMenuItem("Register", "/register/"),  
 ]
   
 
