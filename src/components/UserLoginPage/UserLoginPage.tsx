@@ -44,14 +44,14 @@ export default class UserLoginPage extends React.Component {
 
         this.setState(newState);
     }
-
+    /*
     private formInputChanged(event: React.ChangeEvent<HTMLInputElement>) {
         const newState = Object.assign(this.state, {
             [ event.target.id ]: event.target.value
         });
 
         this.setState(newState);
-    }
+    } */
     
     private setErrorMessage(message: string) {
         this.setState(Object.assign(this.state, {

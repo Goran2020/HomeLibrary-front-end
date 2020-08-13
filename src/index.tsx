@@ -13,11 +13,13 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 import { ContactPage } from './components/ContactPage/ContactPage';
 import UserLoginPage from './components/UserLoginPage/UserLoginPage';
 import CategoryPage from './components/CategoryPage/CategoryPage';
+import { UserRegistrationPage } from './components/UserRegistrationPage/UserRegistrationPage';
 
 const menuItems = [
   new MainMenuItem("Home", "/"),  
   new MainMenuItem("Log in", "/login/"),
   new MainMenuItem("Contact", "/contact/"),
+  new MainMenuItem("Register", "/register/"),
   new MainMenuItem("Cat 1", "/category/1/"),
   new MainMenuItem("Cat 7", "/category/7/"),
   
@@ -34,6 +36,7 @@ ReactDOM.render(
         <Route exact path="/" component={ HomePage} />
         <Route path="/contact" component={ ContactPage } />
         <Route path="/login" component={ UserLoginPage } />
+        <Route path="/register" component={ UserRegistrationPage } />
         <Route path="/category/:cId" component={ CategoryPage } />
       </Switch>    
     </HashRouter>
