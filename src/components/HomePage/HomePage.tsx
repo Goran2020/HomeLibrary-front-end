@@ -28,11 +28,11 @@ class HomePage extends React.Component {
       }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.getCategories();
 	}
 	
-	componentWillUpdate(newComponent: CategoryType) {
+	componentDidUpdate(newComponent: CategoryType) {
 		this.getCategories();
 	}
 
@@ -50,22 +50,39 @@ class HomePage extends React.Component {
 		})
 	}
 
+	private setCategories(categories: CategoryType[]) {
+		this.setState(Object.assign(this.state, {
+		  categories: categories,
+		}));
+	}
+
 	private putCategoriesInState(data: ApiCategoryDto[]) {
+		if (!data || data.length === 0) {
+			this.setCategories([]);
+			return;
+		}
+		/*
 		const categories: CategoryType[] = data.map(category => {
 			return {
 				categoryId: category.categoryId,
-				name: category.name,
-				items: [],
+				name: category.name,				
 			};
 		});
 
-		const newState = Object.assign(this.state, {
-			categories: categories,
+		this.setCategories(categories);
+		*/
+		
+		const categories: CategoryType[] = data.map(category => {
+			return {
+				categoryId: category.categoryId,
+				name: category.name,				
+			};
 		});
-
-		this.setState(newState);
-	}
 	
+
+		this.setCategories(categories);
+	
+	}
 	private setLoggedInState(state: boolean) {
         this.setState(Object.assign(this.state, {
             isUserLoggedIn: state,
@@ -74,9 +91,9 @@ class HomePage extends React.Component {
 
 
     render() {
-      if (this.state.isUserLoggedIn === false) {        
-        return (
-            <Redirect to="/login" />
+		if (this.state.isUserLoggedIn === false) {        
+			return (
+				<Redirect to="/login" />
         );
     }
       return (
@@ -86,7 +103,7 @@ class HomePage extends React.Component {
                       <Card.Title>
                           <FontAwesomeIcon icon={ faListAlt } /> Top level categories
                       </Card.Title>
-                      <Row>
+	  				  <Row>  {/* prikaz categorije*/}
                         { this.state.categories.map(this.singleCategory) }
                       </Row>
                         

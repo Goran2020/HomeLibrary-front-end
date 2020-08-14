@@ -3,8 +3,13 @@ export default class BookType {
     title?: string;
     originalTitle?: string;
     publicationYear?: number;
+    language?: string;
     pages?: number;
-    publisherId?: number;
+    isbn?: string;
+    catalogNumber?: string;
+    publisherId?: number;    
+    imageFront?: string;
+    imageBack?: string;
 }
 
 // kako front-end vidi jedan primerak knjige
