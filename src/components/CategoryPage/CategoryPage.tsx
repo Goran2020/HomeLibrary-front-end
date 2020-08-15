@@ -1,8 +1,8 @@
 import React from 'react';
-import { Container, Card, Row, Col } from 'react-bootstrap';
+import { Container, Card, Row, Col, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CategoryType from '../../types/CategoryType';
-import { faListAlt } from '@fortawesome/free-solid-svg-icons';
+import { faListAlt, faSearch } from '@fortawesome/free-solid-svg-icons';
 import api, { ApiResponse } from '../../api/api';
 import BookType from '../../types/BookType';
 import { Redirect, Link } from 'react-router-dom';
@@ -21,6 +21,11 @@ interface CategoryPageState {
     category?: CategoryType;
     books?: BookType[];
     message?: string;
+    filters: {
+        keywords: string;
+        title: string;
+        order: "title asc" | "title desc" | "authors acs";
+    };
 }
 
 interface BookDto {
@@ -48,7 +53,12 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         this.state = {
             isUserLoggedIn: true,
             message: '',
-            books: []
+            books: [],
+            filters: {
+                keywords: '',
+                title: '',
+                order: 'title asc',
+            }
 
         };
     };   
@@ -66,18 +76,90 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                         <Card.Title>
                             <FontAwesomeIcon icon={ faListAlt } /> { this.state.category?.name }
                         </Card.Title>
-                        <Card.Text>
-                            { this.printOptionalMessage() }
-
-                            { this.showBooks() }
-                        </Card.Text>
                         
+                            { this.printOptionalMessage() }
+                        <Row>
+                            <Col xs="12" md="4" lg="3">
+                                { this.printFilters() }
+                            </Col>
+                            <Col xs="12" md="8" lg="9">
+                            { this.showBooks() }
+                            </Col>
+                        </Row>                       
                     </Card.Body>
                 </Card>
             </Container>
         );
 
         
+    }
+
+    private setNewFilter(filter: any) {
+        this.setState(Object.assign(this.state, {
+            filter: this.setNewFilter,
+        }))
+    }
+
+    private filterKeywordsChanged(event: React.ChangeEvent<HTMLInputElement>) {        
+        this.setNewFilter(Object.assign(this.state.filters, {
+            keywords: event.target.value,
+        }));
+    }
+
+    private filterTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setNewFilter(Object.assign(this.state.filters, {
+            title: event.target.value,
+        }));
+    }
+
+    private filterOrderChanged(event: React.ChangeEvent<HTMLSelectElement>) {
+        this.setNewFilter(Object.assign(this.state.filters, {
+            order: event.target.value,
+        }));
+    }
+
+    private filterApplay() {
+        this.getCategoryData();
+    }
+
+    private printFilters() {
+        return (
+            <>
+               <Form.Group>
+                   <Form.Label htmlFor="keywords">Keywords</Form.Label> <FontAwesomeIcon icon={ faSearch } />
+                   <Form.Control type="text" 
+                                 id="keywords" 
+                                 value={ this.state.filters?.keywords } 
+                                 onChange={ (e) => this.filterKeywordsChanged(e as any) }/>
+               </Form.Group>
+               <Form.Group>
+                   <Row>
+                       <Col xs="12" sm="12">
+                            <Form.Label htmlFor="title">Title</Form.Label> <FontAwesomeIcon icon={ faSearch } />
+                           <Form.Control type="text" 
+                                         id="title" 
+                                         value={ this.state.filters?.title } 
+                                         onChange={ (e) => this.filterTitleChange(e as any) } />
+                       </Col>
+                   </Row>
+               </Form.Group>
+               <Form.Group>
+                   <Form.Control as="select" id="sordOrder"
+                                 value={ this.state.filters?.order }
+                                 onChange={ (e) => this.filterOrderChanged(e as any) }>
+                       <option value="title asc">Sort by Title - asc</option>
+                       <option value="title desc">Sort by Title - desc</option>
+                       <option value="year asc">Sort by Publication year - asc</option>
+                       <option value="year desc">Sort by Publication year - desc</option>
+                   </Form.Control>
+               </Form.Group>
+               <Form.Group>
+                   <Button variant="primary" block onClick={() => this.filterApplay() }>
+                       Start search
+                   </Button>
+               </Form.Group>
+            </>
+        )
     }
 
     private setLoggedInState(state: boolean) {
@@ -188,14 +270,18 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
             this.setCategoryData(categoryData);
         });
 
+        const orderParts = this.state.filters.order.split(' ');
+        const orderBy = orderParts[0];
+        const orderDirection = orderParts[1].toUpperCase();
+
         api('api/book/search/', 'post', {
             categoryId: Number(this.props.match.params.cId),            
-            keywords: "",
-            title: "",            
+            keywords: this.state.filters?.keywords,
+            title: this.state.filters?.title,            
             authors:[],
             publicationYear: 0,
-            orderBy: 'title',
-            orderDirection: 'ASC', 
+            orderBy: orderBy,
+            orderDirection: orderDirection, 
             page: 0,
             itemsPerPage: 10
         })
