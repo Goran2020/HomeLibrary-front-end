@@ -13,6 +13,8 @@ import { ContactPage } from './components/ContactPage/ContactPage';
 import UserLoginPage from './components/UserLoginPage/UserLoginPage';
 import CategoryPage from './components/CategoryPage/CategoryPage';
 import { UserRegistrationPage } from './components/UserRegistrationPage/UserRegistrationPage';
+import UserDashboard from './components/UserDashboard/UserDashboard';
+import DashboardCategory from './components/DashboardCategory/DashboardCategory';
 
 
 /*
@@ -36,6 +38,8 @@ ReactDOM.render(
         <Route path="/login" component={ UserLoginPage } />
         <Route path="/register" component={ UserRegistrationPage } />
         <Route path="/category/:cId" component={ CategoryPage } />
+        <Route exact path="/dashboard/" component={ UserDashboard } />
+        <Route path="/dashboard/category" component={ DashboardCategory } />
       </Switch>    
     </HashRouter>
   </React.StrictMode>,

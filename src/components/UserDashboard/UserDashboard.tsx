@@ -1,84 +1,54 @@
 import React from 'react';
-import { Container, Card, Row, Col } from 'react-bootstrap';
+import { Container, Card, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faListAlt } from '@fortawesome/free-solid-svg-icons';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 import CategoryType from '../../types/CategoryType';
 import { Redirect, Link } from 'react-router-dom';
-import api, { ApiResponse } from '../../api/api';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
-import ApiCategoryDto from '../../dtos/ApiCategoryDto';
+import api, { ApiResponse } from '../../api/api';
 
 
 
-interface HomePageState {
+interface UserDashboardState {
   isUserLoggedIn: boolean;
-  categories?: CategoryType[];
+  
 }
 
-
-
-class HomePage extends React.Component {
-    state: HomePageState;
+class UserDashboard extends React.Component {
+    state: UserDashboardState;
     constructor(props: Readonly<{}>) {
       super(props);
 
       this.state = {
-        isUserLoggedIn: true,
-        categories: [],
+        isUserLoggedIn: true,        
       }
     }
 
     componentWillMount() {
-        this.getCategories();
+        this.getUserData();
 	}
 	
 	componentWillUpdate() {
-		this.getCategories();
+		this.getUserData();
 	}
 
-    private getCategories() {
-		api('api/category/', 'get', {})
-		.then((res: ApiResponse) => {
-			//console.log(res);
-
-			if (res.status === 'error' || res.status === 'login') {
-				this.setLoggedInState(false);
-				return;
-			}
-
-			this.putCategoriesInState(res.data);
-		})
-	}
-
-	private setCategories(categories: CategoryType[]) {
-		this.setState(Object.assign(this.state, {
-		  categories: categories,
-		}));
-	}
-
-	private putCategoriesInState(data?: ApiCategoryDto[]) {
-		if (!data || data.length === 0) {
-			this.setCategories([]);
-			return;
-		}
-		
-		const categories: CategoryType[] | undefined = data?.map(category => {
-			return {
-				categoryId: category.categoryId,
-				name: category.name,				
-			};
-		});
-	
-
-		this.setCategories(categories);
-	
-	}
 	private setLoggedInState(state: boolean) {
         this.setState(Object.assign(this.state, {
             isUserLoggedIn: state,
         }));
     }
 
+    private getUserData() {
+        api('/api/user/', 'get', {})
+        .then((res: ApiResponse) => {
+            if (res.status === 'error' || res.status === 'login') {
+				this.setLoggedInState(false);
+				return;
+			}
+
+        });
+        
+    }
 
     render() {
 		if (this.state.isUserLoggedIn === false) {        
@@ -92,11 +62,14 @@ class HomePage extends React.Component {
               <Card>
                   <Card.Body>
                       <Card.Title>
-                          <FontAwesomeIcon icon={ faListAlt } /> Top level categories
+                          <FontAwesomeIcon icon={ faHome } /> User Dashboard
                       </Card.Title>
-	  				          <Row>  {/* prikaz categorije*/}
-                        { this.state.categories?.map(this.singleCategory) }
-                      </Row>                     
+	  				        <ul>
+                                <li><Link to="/dashboard/category/">Categories</Link></li>
+                                <li><Link to="/dashboard/book">Book</Link></li>
+                                <li><Link to="/dashboard/publisher">Publisher</Link></li>
+                                <li><Link to="/dashboard/location">Location</Link></li>
+                            </ul>
                   </Card.Body>
               </Card>
           </Container>
@@ -121,4 +94,4 @@ class HomePage extends React.Component {
   
 }
 
-export default HomePage;
+export default UserDashboard;
