@@ -20,10 +20,17 @@ interface CategoryPageState {
     isUserLoggedIn?: boolean;
     category?: CategoryType;
     books?: BookType[];
+    title?: string;
+    forename?: string;
+    surname?: string;
+    authorId?: number;
     message?: string;
     filters: {
         keywords: string;
         title: string;
+        authorId: number;
+        forename: string;
+        surname: string;
         order: "title asc" | "title desc" | "authors acs";
     };
 }
@@ -53,10 +60,13 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         this.state = {
             isUserLoggedIn: true,
             message: '',
-            books: [],
+            books: [],                  
             filters: {
                 keywords: '',
                 title: '',
+                authorId: 0,     
+                forename: '',
+                surname: '',
                 order: 'title asc',
             }
 
@@ -94,9 +104,9 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         
     }
 
-    private setNewFilter(filter: any) {
+    private setNewFilter(newFilter: any) {
         this.setState(Object.assign(this.state, {
-            filter: this.setNewFilter,
+            filter: newFilter,
         }))
     }
 
@@ -118,8 +128,22 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         }));
     }
 
-    private filterApplay() {
+    private filterSurnameChange(event: React.ChangeEvent<HTMLSelectElement>) {
+        this.setNewFilter(Object.assign(this.state.filters, {
+            surname: event.target.value,
+        }));
+    }    
+    
+    
+    private filterForenameChange(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setNewFilter(Object.assign(this.state.filters, {
+            forename: event.target.value,
+        }));
+    }
+
+    private filterApplay() {        
         this.getCategoryData();
+        
     }
 
     private printFilters() {
@@ -140,6 +164,20 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                                          id="title" 
                                          value={ this.state.filters?.title } 
                                          onChange={ (e) => this.filterTitleChange(e as any) } />
+                       </Col>
+                       <Col xs="12" sm="12">
+                            <Form.Label htmlFor="forename">Forename</Form.Label> <FontAwesomeIcon icon={ faSearch } />
+                           <Form.Control type="text" 
+                                         id="forename" 
+                                         value={ this.state.filters?.forename } 
+                                         onChange={ (e) => this.filterForenameChange(e as any) } />
+                       </Col>
+                       <Col xs="12" sm="12">
+                            <Form.Label htmlFor="surname">Surname</Form.Label> <FontAwesomeIcon icon={ faSearch } />
+                           <Form.Control type="text" 
+                                         id="surname" 
+                                         value={ this.state.filters?.surname } 
+                                         onChange={ (e) => this.filterSurnameChange(e as any) } />
                        </Col>
                    </Row>
                </Form.Group>
@@ -180,16 +218,19 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         );
     }
 
-    componentDidMount() {
+    componentDidMount() {  
+        
         this.getCategoryData();
+        
     }
 
     componentDidUpdate(oldProperties: CategoryPageProperties) {
         if (oldProperties.match.params.cId === this.props.match.params.cId) {
             return;
-        }
+        }     
         
         this.getCategoryData();
+        
     }
 
     private setBooks(books: BookType[]) {
@@ -209,6 +250,14 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
             category: category,
         }));
     }
+
+    private setAuhtorIdState(id: number) {
+        const newState = Object.assign(this.state.filters, {
+            authorId: id,
+        });
+ 
+        this.setState(newState);
+     }
 
     private singleBook(book: BookType) {
         return (
@@ -250,8 +299,33 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
             </Row>
         );
     }
-
+    
+    // pretraga po autoru - dopremanje authorId-a i setovanje u stanje komponente //
+    private getAuthorId() {
+        
+            api('api/author/findOne','post', {
+                forename: this.state.filters.forename,
+                surname: this.state.filters.surname,
+            })
+            .then((res: ApiResponse) => {
+                if (res.status === 'login') {
+                    return this.setLoggedInState(false);				
+                }
+                
+                if (res.status === 'error') {
+                    return this.setMessage('Please wait...or try to refresh');
+                }
+                
+                const authorId: number = res.data.authorId;
+                console.log("ovo je autorId", authorId);
+                this.setAuhtorIdState(authorId);            
+            });   
+        
+            
+    }
+    
     private getCategoryData() {
+        
         api('api/category/' + this.props.match.params.cId, 'get', {})
         .then((res: ApiResponse) => {
             if (res.status === 'login') {
@@ -266,7 +340,8 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                 categoryId: res.data.categoryId,
                 name: res.data.name,
             };
-
+            
+            
             this.setCategoryData(categoryData);
         });
 
@@ -274,11 +349,15 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         const orderBy = orderParts[0];
         const orderDirection = orderParts[1].toUpperCase();
 
+         
+        this.getAuthorId(); // ovo treba da setuje authorId kada se izvrši pretraga
+        
+        
         api('api/book/search/', 'post', {
             categoryId: Number(this.props.match.params.cId),            
             keywords: this.state.filters?.keywords,
             title: this.state.filters?.title,            
-            authors:[],
+            authorId: this.state.filters?.authorId,
             publicationYear: 0,
             orderBy: orderBy,
             orderDirection: orderDirection, 
@@ -324,39 +403,12 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                                 object.imageBack = book.photos[i].imagePath;
                             }                           
                     }
-
+                    console.log(object);
                     return object;
                 })
                 
-                this.setBooks(books);    
+                this.setBooks(books);           
 
-            
-            //console.log(books);
-            
-
-
-            /*
-            const books: BookType[] = 
-            res.data.map((book: BookDto) => {
-                
-                const object: BookType = {
-                    bookId: book.bookId,
-                    title: book.title,
-                    originalTitle: book.originalTitle,
-                    publicationYear: book.publicationYear,
-                    pages: book.pages,
-                    isbn: book.isbn,
-                    language: book.language,
-                    catalogNumber: book.catalogNumber,
-                    imageUrlFront: String(book.photos[0]),
-                    imageUrlBack: String(book.photos[1]),                    
-                }    
-                
-                return object;
-                
-            }
-
-            this.setBooks(books);*/
         })
     }
 }
