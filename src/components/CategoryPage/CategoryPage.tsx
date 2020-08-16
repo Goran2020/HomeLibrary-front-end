@@ -7,6 +7,8 @@ import api, { ApiResponse } from '../../api/api';
 import BookType from '../../types/BookType';
 import { Redirect, Link } from 'react-router-dom';
 import { ApiConfig } from '../../config/api.config';
+import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
+
 
 interface CategoryPageProperties {
     match: {
@@ -81,6 +83,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         }
         return (
             <Container>
+                <RoledMainMenu role='user' />
                 <Card>
                     <Card.Body>
                         <Card.Title>

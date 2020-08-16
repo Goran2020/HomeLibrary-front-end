@@ -7,7 +7,6 @@ import 'jquery/dist/jquery.js';
 import 'popper.js/dist/popper.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
-import { MainMenu, MainMenuItem } from './components/MainMenu/MainMenu';
 import HomePage from './components/HomePage/HomePage';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import { ContactPage } from './components/ContactPage/ContactPage';
@@ -15,6 +14,8 @@ import UserLoginPage from './components/UserLoginPage/UserLoginPage';
 import CategoryPage from './components/CategoryPage/CategoryPage';
 import { UserRegistrationPage } from './components/UserRegistrationPage/UserRegistrationPage';
 
+
+/*
 const menuItems = [
   new MainMenuItem("Home", "/"),  
   new MainMenuItem("Log in", "/login/"),
@@ -22,12 +23,12 @@ const menuItems = [
   new MainMenuItem("Register", "/register/"),  
 ]
   
-
+*/
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <MainMenu items={ menuItems }></MainMenu>
+    { /* <MainMenu items={ menuItems }></MainMenu> */ }
     <HashRouter>
       <Switch>
         <Route exact path="/" component={ HomePage} />

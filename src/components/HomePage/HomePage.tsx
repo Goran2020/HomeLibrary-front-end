@@ -5,11 +5,13 @@ import { faListAlt } from '@fortawesome/free-solid-svg-icons';
 import CategoryType from '../../types/CategoryType';
 import { Redirect, Link } from 'react-router-dom';
 import api, { ApiResponse } from '../../api/api';
+import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
+
 
 
 interface HomePageState {
   isUserLoggedIn: boolean;
-  categories: CategoryType[];
+  categories?: CategoryType[];
 }
 
 interface ApiCategoryDto {
@@ -28,18 +30,18 @@ class HomePage extends React.Component {
       }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.getCategories();
 	}
 	
-	componentDidUpdate(newComponent: CategoryType) {
+	componentWillUpdate() {
 		this.getCategories();
 	}
 
     private getCategories() {
 		api('api/category/', 'get', {})
 		.then((res: ApiResponse) => {
-			console.log(res);
+			//console.log(res);
 
 			if (res.status === 'error' || res.status === 'login') {
 				this.setLoggedInState(false);
@@ -56,23 +58,13 @@ class HomePage extends React.Component {
 		}));
 	}
 
-	private putCategoriesInState(data: ApiCategoryDto[]) {
+	private putCategoriesInState(data?: ApiCategoryDto[]) {
 		if (!data || data.length === 0) {
 			this.setCategories([]);
 			return;
 		}
-		/*
-		const categories: CategoryType[] = data.map(category => {
-			return {
-				categoryId: category.categoryId,
-				name: category.name,				
-			};
-		});
-
-		this.setCategories(categories);
-		*/
 		
-		const categories: CategoryType[] = data.map(category => {
+		const categories: CategoryType[] | undefined = data?.map(category => {
 			return {
 				categoryId: category.categoryId,
 				name: category.name,				
@@ -98,16 +90,15 @@ class HomePage extends React.Component {
     }
       return (
           <Container>
+            <RoledMainMenu role="user" /> 
               <Card>
                   <Card.Body>
                       <Card.Title>
                           <FontAwesomeIcon icon={ faListAlt } /> Top level categories
                       </Card.Title>
-	  				  <Row>  {/* prikaz categorije*/}
-                        { this.state.categories.map(this.singleCategory) }
-                      </Row>
-                        
-                      
+	  				          <Row>  {/* prikaz categorije*/}
+                        { this.state.categories?.map(this.singleCategory) }
+                      </Row>                     
                   </Card.Body>
               </Card>
           </Container>

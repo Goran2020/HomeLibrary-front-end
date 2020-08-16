@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faBookReader } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import api, { ApiResponse } from '../../api/api';
+import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
+
 
 
 interface UserRegistartionPageState {
@@ -29,6 +31,7 @@ export class UserRegistrationPage extends React.Component {
 
         return (
             <Container>
+                <RoledMainMenu role="visitor" />
                 <Col md={ { span: 8, offset: 2} }>
                     <Card>
                         <Card.Body>
