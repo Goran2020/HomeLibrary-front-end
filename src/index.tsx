@@ -15,6 +15,7 @@ import CategoryPage from './components/CategoryPage/CategoryPage';
 import { UserRegistrationPage } from './components/UserRegistrationPage/UserRegistrationPage';
 import UserDashboard from './components/UserDashboard/UserDashboard';
 import DashboardCategory from './components/DashboardCategory/DashboardCategory';
+import DashboardBook from './components/DashboardBook/DashboardBook';
 
 
 /*
@@ -40,6 +41,7 @@ ReactDOM.render(
         <Route path="/category/:cId" component={ CategoryPage } />
         <Route exact path="/dashboard/" component={ UserDashboard } />
         <Route path="/dashboard/category" component={ DashboardCategory } />
+        <Route path="/dashboard/book/" component={ DashboardBook } />
       </Switch>    
     </HashRouter>
   </React.StrictMode>,

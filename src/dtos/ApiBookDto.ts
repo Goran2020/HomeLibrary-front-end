@@ -1,20 +1,18 @@
-export default class BookType {
+export default interface ApiBookDto {
     bookId?: number;
     title?: string;
     originalTitle?: string;
     publicationYear?: number;
+    isVisible?: number;
+    language?: string;
     pages?: number;
     isbn?: string;
-    isVisible?: number;
-    language?: string;    
     catalogNumber?: string;
-    publisherId?: number;    
+    publisherId?: number;
+    locationId?: number;     
     imageFront?: string;
     imageBack?: string;
-    location?: {
-        room: string;
-        shelf: string;
-    };
+    
     category?: {
         categoryId: number;
         name: string;
@@ -24,17 +22,18 @@ export default class BookType {
         forename: string;
         surname: string;
     }[];
-    photos?: {
+    photos: {
         photoId: number;
         imagePath: string;
     }[];
     categoryBook?: {
         name: string;
     };
+    location?: {
+        room: string;
+        shelf: string;
+    }
     publisher?: {
         name: string;
     }
-    
 }
-
-// kako front-end vidi jedan primerak knjige
