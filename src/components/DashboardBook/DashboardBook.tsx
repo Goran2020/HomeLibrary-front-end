@@ -5,7 +5,7 @@ import { faListAlt, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import BookType from '../../types/BookType';
 import { Redirect } from 'react-router-dom';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
-import api, { ApiResponse } from '../../api/api';
+import api, { ApiResponse, apiFile } from '../../api/api';
 import ApiBookDto from '../../dtos/ApiBookDto';
 import CategoryType from '../../types/CategoryType';
 import ApiCategoryDto from '../../dtos/ApiCategoryDto';
@@ -504,7 +504,14 @@ class DashboardBook extends React.Component {
                     </Card.Body>
                 </Card>
                 
-                <Modal centered show={ this.state.addModal.visible } onHide={ () => this.setAddModalVisible(false) }>
+                <Modal centered show={ this.state.addModal.visible } 
+                                onHide={ () => this.setAddModalVisible(false) }
+                                onEntered={ () => { 
+                                    if (document.getElementById('photo')) {
+                                        const filePhoto: any = document.getElementById('photo');
+                                        filePhoto.value = ''; 
+                                    }
+                                } }>
                     <Modal.Header closeButton>
                         <Modal.Title>
                             Add new Book
@@ -528,7 +535,7 @@ class DashboardBook extends React.Component {
                             </Form.Control>
                         </Form.Group>
                         <div>                            
-							{ this.state.authors.map(this.printAddModalAuthorInput ,this) }
+							{ this.state.authors.map(this.printAddModalAuthorInput ,this) }   { /* spisak autora */ }
 						</div>
                         <Form.Group>  {/* YEAR   */ }
                             <Form.Label htmlFor="publicationYear">Publication Year</Form.Label>
@@ -623,6 +630,12 @@ class DashboardBook extends React.Component {
                                         ) ) }
                             </Form.Control>
                         </Form.Group>
+                        <Form.Group>  {/* PHOTO   */ }
+                            <Form.Label htmlFor="photo">Photo</Form.Label>
+                            <Form.File id="photo">
+
+                            </Form.File>
+                        </Form.Group>
                         <Form.Group>
                             <Button variant="primary" onClick= { () => this.doAddBook() }>
                                 <FontAwesomeIcon icon={ faPlus } /> Add new Book 
@@ -689,10 +702,11 @@ class DashboardBook extends React.Component {
     private printAddModalAuthorInput(author: any) {  // printa fragmet koji se odnosi na checkbox polje u modalu dodavanja knjige
         return(
             <Form.Group>
+                
             <Row>
                 <Col xs="2" sm="1" className="text-center">
                 <input type="checkbox" value="1" checked={ author.use === 1}
-                    onChange= { (e) => this.setAddModalAuthorUse(author.author, e.target.checked) } />
+                    onChange= { (e) => this.setAddModalAuthorUse(author.authorId, e.target.checked) } />
                 </Col>
                 <Col xs="10" sm="4">
                     { author.forename + " " + author.surname }
@@ -707,10 +721,29 @@ class DashboardBook extends React.Component {
     }
     
     private doAddBook() {
-        api('api/Book', 'post', {
-            name: this.state.addModal.name
+        const filePhoto: any = document.getElementById('photo');
+        if (filePhoto.files.length === 0) {
+            this.setAddModalStringFieldState('message', 'Please select a photo to upload.');
+            return;
+        }
+
+        api('api/book/createBook', 'post', {
+            categoryId: this.state.addModal.categoryId,
+            title: this.state.addModal.title,
+            originalTitle: this.state.addModal.originalTitle,
+            publicationYear: this.state.addModal.publicationYear,
+            pages: this.state.addModal.pages,
+            isbn: this.state.addModal.isbn,
+            language: this.state.addModal.language,
+            publisherId: this.state.addModal.publisherId,
+            locationId: this.state.addModal.locationId,
+            authors: this.state.addModal.authors
+                    .filter(author => author.use === 1)
+                    .map(author => ({
+                        authorId: author.authorId,                        
+                    }))
         })
-        .then((res: ApiResponse) => {
+        .then(async (res: ApiResponse) => {
             if (res.status === 'login') {
                 return this.setLoggedInState(false);				
             }
@@ -719,10 +752,26 @@ class DashboardBook extends React.Component {
                 return this.setMessage('Please wait...or try to refresh');
             }
 
+            const bookId: number = res.data.bookId;
+
+            const file = filePhoto.files[0];
+            
+            await this.uploadBookPhoto(bookId, file);
+            /*
+            const res2 = await this.uploadBookPhoto(bookId, file);
+            if (res.status !== 'ok') {
+                this.setAddModalStringFieldState('message', 'Could not upload this file.');
+                return;
+            }
+            */
             this.setAddModalVisible(false);
             this.getBooks();    
             
         });
+    }
+
+    private async uploadBookPhoto(bookId: number, file: File) {
+        return await apiFile('api/book/' + bookId + '/uploadPhoto/', 'photo', file);
     }
 
     private setMessage(message: string) {
@@ -739,9 +788,17 @@ class DashboardBook extends React.Component {
     }
 
     private showAddModal() {
-        this.setAddModalStringFieldState('name', '');
+        this.setAddModalStringFieldState('title', '');
+        this.setAddModalStringFieldState('originalTitle', '');
+        this.setAddModalStringFieldState('publicationYear', '');
+        this.setAddModalStringFieldState('pages', '');
+        this.setAddModalStringFieldState('isbn', '');
+        this.setAddModalStringFieldState('language', '');
+        this.setAddModalStringFieldState('locationId', '1');
+        this.setAddModalStringFieldState('message', '');       
+
         this.setAddModalVisible(true);
-        this.setAddModalStringFieldState('message', '');
+        
     } 
     
     private doEditBook() {
