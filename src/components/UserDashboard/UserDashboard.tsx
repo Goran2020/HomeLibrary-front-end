@@ -69,6 +69,7 @@ class UserDashboard extends React.Component {
                                 <li><Link to="/dashboard/book">Book</Link></li>
                                 <li><Link to="/dashboard/publisher">Publisher</Link></li>
                                 <li><Link to="/dashboard/location">Location</Link></li>
+                                <li><Link to="/dashboard/author">Author</Link></li>
                             </ul>
                   </Card.Body>
               </Card>

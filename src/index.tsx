@@ -16,6 +16,9 @@ import { UserRegistrationPage } from './components/UserRegistrationPage/UserRegi
 import UserDashboard from './components/UserDashboard/UserDashboard';
 import DashboardCategory from './components/DashboardCategory/DashboardCategory';
 import DashboardBook from './components/DashboardBook/DashboardBook';
+import DashboardLocation from './components/DashboardLocation/DashboardLocation';
+import DashboardPublisher from './components/DashboardPublisher/DashboardPublisher';
+import DashboardAuthor from './components/DashboardAuthor/DashboardAuthor';
 
 
 /*
@@ -42,6 +45,9 @@ ReactDOM.render(
         <Route exact path="/dashboard/" component={ UserDashboard } />
         <Route path="/dashboard/category" component={ DashboardCategory } />
         <Route path="/dashboard/book/" component={ DashboardBook } />
+        <Route path="/dashboard/location/" component={ DashboardLocation } />
+        <Route path="/dashboard/publisher/" component={ DashboardPublisher } />
+        <Route path="/dashboard/author/" component={ DashboardAuthor } />
       </Switch>    
     </HashRouter>
   </React.StrictMode>,

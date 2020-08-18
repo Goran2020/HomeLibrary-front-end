@@ -441,9 +441,7 @@ class DashboardBook extends React.Component {
                     { author.forename + " " + author.surname }
                 </Col>
                 
-            </Row>
-            
-            
+            </Row>         
             
         </Form.Group>
         );
@@ -833,10 +831,7 @@ class DashboardBook extends React.Component {
                     { author.forename + " " + author.surname }
                 </Col>
                 
-            </Row>
-            
-            
-            
+            </Row>           
         </Form.Group>
         );
     }
@@ -920,8 +915,7 @@ class DashboardBook extends React.Component {
         this.setAddModalStringFieldState('publicationYear', '');
         this.setAddModalStringFieldState('pages', '');
         this.setAddModalStringFieldState('isbn', '');
-        this.setAddModalStringFieldState('language', '');
-        //this.setAddModalStringFieldState('locationId', '1');
+        this.setAddModalStringFieldState('language', '');       
         this.setAddModalStringFieldState('message', '');       
         
         
@@ -944,12 +938,7 @@ class DashboardBook extends React.Component {
             authors: this.state.editModal.authors.filter(author => author.use === 1).map(author => ({
                 authorId: author.authorId,
             }))
-            /*
-            authors: this.state.addModal.authors
-                    .filter(author => author.use === 1)
-                    .map(author => ({
-                        authorId: author.authorId,                        
-                    }))  */
+            
         })
         .then((res: ApiResponse) => {
             if (res.status === 'login') {
