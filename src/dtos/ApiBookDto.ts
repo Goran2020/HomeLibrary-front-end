@@ -10,8 +10,7 @@ export default interface ApiBookDto {
     catalogNumber?: string;
     publisherId?: number;
     locationId?: number;     
-    imageFront?: string;
-    imageBack?: string;
+    
     
     category?: {
         categoryId: number;
@@ -22,8 +21,9 @@ export default interface ApiBookDto {
         forename: string;
         surname: string;
     }[];
-    photos: {
-        photoId: number;
+    photos?: {
+        bookId: number;
+        cover: string;
         imagePath: string;
     }[];
     categoryBook?: {

@@ -8,9 +8,8 @@ export default class BookType {
     isVisible?: number;
     language?: string;    
     catalogNumber?: string;
-    publisherId?: number;    
-    imageFront?: string;
-    imageBack?: string;
+    publisherId?: number; 
+    imageUrl?: string;  
     location?: {
         room: string;
         shelf: string;
@@ -25,7 +24,8 @@ export default class BookType {
         surname: string;
     }[];
     photos?: {
-        photoId: number;
+        bookId: number;
+        cover: string;
         imagePath: string;
     }[];
     categoryBook?: {

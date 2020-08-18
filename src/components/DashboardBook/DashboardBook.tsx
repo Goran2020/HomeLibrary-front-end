@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Card, Table, Button, Modal, Form, Alert, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faListAlt, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faListAlt, faEdit, faPlus, faSave } from '@fortawesome/free-solid-svg-icons';
 import BookType from '../../types/BookType';
 import { Redirect } from 'react-router-dom';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
@@ -361,9 +361,7 @@ class DashboardBook extends React.Component {
                 isVisible: book.isVisible,
                 language: book.language,    
                 catalogNumber: book.catalogNumber,
-                publisherId: book.publisherId,    
-                imageFront: book.imageFront,
-                imageBack: book.imageBack,
+                publisherId: book.publisherId,                
                 authors: book.authors,
                 photos: book.photos,
                 category: book.category,
@@ -430,6 +428,26 @@ class DashboardBook extends React.Component {
         ));
     }
     
+    private printEditModalAuthorInput(author: any) {
+        return(
+            <Form.Group>
+                
+            <Row>
+                <Col xs="2" sm="1" className="text-center">
+                <input type="checkbox" value="1" checked={ author.use === 1}
+                    onChange= { (e) => this.setEditModalAuthorUse(author.authorId, e.target.checked) } />
+                </Col>
+                <Col xs="10" sm="4">
+                    { author.forename + " " + author.surname }
+                </Col>
+                
+            </Row>
+            
+            
+            
+        </Form.Group>
+        );
+    }
 
     render() {
 		if (this.state.isUserLoggedIn === false) {        
@@ -448,7 +466,7 @@ class DashboardBook extends React.Component {
                             <Table hover size="sm" bordered>
                                 <thead>
                                     <tr>
-                                        <th colSpan={ 2 }></th>
+                                        <th colSpan={ 8 }></th>
                                         <th className="text-center">
                                             <Button 
                                                 variant="primary" 
@@ -534,8 +552,10 @@ class DashboardBook extends React.Component {
                                           onChange={ (e) => this.setAddModalStringFieldState('originalTitle', e.target.value) } >
                             </Form.Control>
                         </Form.Group>
-                        <div>                            
-							{ this.state.authors.map(this.printAddModalAuthorInput ,this) }   { /* spisak autora */ }
+                        { console.log("broj autora u addModal state-u", this.state.addModal.authors.length) }   
+                        <div>         { /* AUTHORS */}
+                                               
+							{ this.state.addModal.authors.map(this.printAddModalAuthorInput ,this) }   { /* spisak autora */ }
 						</div>
                         <Form.Group>  {/* YEAR   */ }
                             <Form.Label htmlFor="publicationYear">Publication Year</Form.Label>
@@ -560,17 +580,7 @@ class DashboardBook extends React.Component {
                                           value={ this.state.addModal.isbn } 
                                           onChange={ (e) => this.setAddModalStringFieldState('isbn', e.target.value) } >
                             </Form.Control>
-                        </Form.Group>
-                        <Form.Group>  {/* STATUS   */ }
-                            <Form.Label htmlFor="isVisible">Status</Form.Label>
-                            <Form.Control id="isVisible" 
-                                          as="select" 
-                                          value={ this.state.addModal.isVisible } 
-                                          onChange={ (e) => this.setAddModalNumberFieldState('isVisible', e.target.value) } >
-                                              <option value="0">Hidden</option>
-                                              <option value="1">Visible</option>
-                            </Form.Control>
-                        </Form.Group>
+                        </Form.Group>                        
                         <Form.Group>  {/* LANGUAGE   */ }
                             <Form.Label htmlFor="language">Language</Form.Label>
                             <Form.Control id="language" 
@@ -646,30 +656,125 @@ class DashboardBook extends React.Component {
                         }
                     </Modal.Body>
                 </Modal>
+                
+                {/* =>  E D I T I N G   */}
 
-                <Modal centered show={ this.state.editModal.visible } onHide={ () => this.setEditModalVisible(false) }>
+                <Modal centered show={ this.state.editModal.visible } 
+                                onHide={ () => this.setEditModalVisible(false) }>                                
                     <Modal.Header closeButton>
                         <Modal.Title>
                             Edit Book
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form.Group>
-                            <Form.Label htmlFor="name">Name</Form.Label>
-                            <Form.Control id="name" 
+                        <Form.Group>  {/* TITLE   */ }
+                            <Form.Label htmlFor="title">Title</Form.Label>
+                            <Form.Control id="title" 
                                           type="text" 
-                                          value={ this.state.editModal.name } 
-                                          onChange={ (e) => this.setEditModalStringFieldState('name', e.target.value) } >
-                            </Form.Control>.
+                                          value={ this.state.editModal.title } 
+                                          onChange={ (e) => this.setEditModalStringFieldState('title', e.target.value) } >
+                            </Form.Control>
                         </Form.Group>
-
+                        <Form.Group>  {/* ORIGINAL TITLE   */ }
+                            <Form.Label htmlFor="originalTitle">Original Title</Form.Label>
+                            <Form.Control id="originalTitle" 
+                                          type="text" 
+                                          value={ this.state.editModal.originalTitle } 
+                                          onChange={ (e) => this.setEditModalStringFieldState('originalTitle', e.target.value) } >
+                            </Form.Control>
+                        </Form.Group>
+                        { console.log("Broj autora u state", this.state.authors.length) }  
+                        <Form.Label>Author(s)</Form.Label>
+                        <div>   
+                                               
+							{ this.state.addModal.authors.map(this.printAddModalAuthorInput ,this) }   { /* spisak autora */ }
+						</div>
+                        <Form.Group>  {/* YEAR   */ }
+                            <Form.Label htmlFor="publicationYear">Publication Year</Form.Label>
+                            <Form.Control id="publicationYear" 
+                                          type="text" 
+                                          value={ this.state.editModal.publicationYear } 
+                                          onChange={ (e) => this.setEditModalNumberFieldState('publicationYear', e.target.value) } >
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group>  {/* PAGES   */ }
+                            <Form.Label htmlFor="pages">Pages</Form.Label>
+                            <Form.Control id="pages" 
+                                          type="text" 
+                                          value={ this.state.editModal.pages } 
+                                          onChange={ (e) => this.setEditModalNumberFieldState('pages', e.target.value) } >
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group>  {/* ISBN   */ }
+                            <Form.Label htmlFor="isbn">ISBN</Form.Label>
+                            <Form.Control id="isbn" 
+                                          type="text" 
+                                          value={ this.state.editModal.isbn } 
+                                          onChange={ (e) => this.setEditModalStringFieldState('isbn', e.target.value) } >
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group>  {/* STATUS   */ }
+                            <Form.Label htmlFor="isVisible">Status</Form.Label>
+                            <Form.Control id="isVisible" 
+                                          as="select" 
+                                          value={ this.state.editModal.isVisible } 
+                                          onChange={ (e) => this.setEditModalNumberFieldState('isVisible', e.target.value) } >
+                                              <option value="0">Hidden</option>
+                                              <option value="1">Visible</option>
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group>  {/* LANGUAGE   */ }
+                            <Form.Label htmlFor="language">Language</Form.Label>
+                            <Form.Control id="language" 
+                                          type="text" 
+                                          value={ this.state.editModal.language } 
+                                          onChange={ (e) => this.setEditModalStringFieldState('language', e.target.value) } >
+                            </Form.Control>
+                        </Form.Group>                      
+                        <Form.Group>  {/* PUBLISHER   */ }
+                            <Form.Label htmlFor="publisher">Publisher</Form.Label>
+                            <Form.Control id="publisher" 
+                                          as="select" 
+                                          value={ this.state.editModal.publisherId.toString() } 
+                                          onChange={ (e) => this.setEditModalNumberFieldState('publisherId', e.target.value) } >
+                                        { this.state.publishers.map(publisher => (
+                                            <option value={ publisher.publisherId?.toString() }>
+                                                { publisher.name }
+                                            </option>
+                                        ) ) }
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group>  {/* LOCATION   */ }
+                            <Form.Label htmlFor="location-room, location-shelf">Location</Form.Label>
+                            <Form.Control id="location-room" 
+                                          as="select" 
+                                          value={ this.state.editModal.locationId.toString() } 
+                                          
+                                          onChange={ (e) => this.setEditModalNumberFieldState('locationId', e.target.value) } >
+                                        { this.state.locations.map(location => (
+                                            <option value={ location.locationId?.toString() }>
+                                                { location.room }
+                                            </option>
+                                        ) ) }
+                            </Form.Control>
+                            <Form.Control id="location-shelf" 
+                                          as="select" 
+                                          value={ this.state.editModal.locationId.toString() } 
+                                          onChange={ (e) => this.setEditModalNumberFieldState('locationId', e.target.value) } >
+                                        { this.state.locations.map(location => (
+                                            <option value={ location.locationId?.toString() }>
+                                                { location.shelf }
+                                            </option>
+                                        ) ) }
+                            </Form.Control>
+                        </Form.Group>                        
                         <Form.Group>
                             <Button variant="primary" onClick= { () => this.doEditBook() }>
-                                <FontAwesomeIcon icon={ faEdit } /> Edit Book 
+                                <FontAwesomeIcon icon={ faSave } /> Edit Book 
                             </Button>
                         </Form.Group>
                         { this.state.editModal.message ? 
-                            ( <Alert variant="danger" value={ this.state.addModal.message } /> ) : ''
+                            ( <Alert variant="danger" value={ this.state.editModal.message } /> ) : ''
                         }
                     </Modal.Body>
                 </Modal>
@@ -678,6 +783,22 @@ class DashboardBook extends React.Component {
 
             
         );
+    }
+    private setEditModalAuthorUse(authorId: number, use: boolean) {  // prođi kroz autore i mapiraj čekirane
+        const editAuthor: { authorId: number, forename: string, surname: string, use: number}[] = [...this.state.addModal.authors];
+        for (const author of editAuthor) {
+            if (author.authorId === authorId) {
+                author.use = use ? 1 : 0;
+                break;
+            }
+        }
+        console.log("addAuthor", editAuthor);
+        this.setState(Object.assign(this.state,
+            Object.assign(this.state.editModal, {
+                authors: editAuthor,
+            }),
+        ));
+        
     }
 
     private setAddModalAuthorUse(authorId: number, use: boolean) {  // prođi kroz autore i mapiraj čekirane
@@ -781,10 +902,16 @@ class DashboardBook extends React.Component {
     }
 
     private showEditModal(book: BookType) {
-        this.setEditModalStringFieldState('name', String(book.title));
-        this.setEditModalVisible(true);
+        this.setEditModalStringFieldState('title', String(book.title));
+        this.setEditModalStringFieldState('originalTitle', String(book.originalTitle));
+        this.setEditModalNumberFieldState('publicationYear', String(book.publicationYear));
+        this.setEditModalNumberFieldState('pages', String(book.pages));
+        this.setEditModalStringFieldState('isbn', String(book.isbn));
+        this.setEditModalStringFieldState('language', String(book.language));        
         this.setEditModalStringFieldState('message', '');
         this.setEditModalNumberFieldState('bookId', book.bookId ? book.bookId?.toString() : 'null');
+    
+        this.setEditModalVisible(true);
     }
 
     private showAddModal() {
@@ -794,16 +921,35 @@ class DashboardBook extends React.Component {
         this.setAddModalStringFieldState('pages', '');
         this.setAddModalStringFieldState('isbn', '');
         this.setAddModalStringFieldState('language', '');
-        this.setAddModalStringFieldState('locationId', '1');
+        //this.setAddModalStringFieldState('locationId', '1');
         this.setAddModalStringFieldState('message', '');       
-
+        
+        
+        
         this.setAddModalVisible(true);
         
     } 
     
     private doEditBook() {
         api('api/book/' + this.state.editModal.bookId, 'patch', {
-            name: this.state.editModal.name
+            title: this.state.editModal.title,
+            originalTitle: this.state.editModal.originalTitle,
+            publicationYear: this.state.editModal.publicationYear,
+            pages: this.state.editModal.pages,
+            isbn: this.state.editModal.isbn,
+            language: this.state.editModal.language,
+            publisherId: this.state.editModal.publisherId,
+            isVisible: this.state.editModal.isVisible,
+            locationId: this.state.editModal.locationId,
+            authors: this.state.editModal.authors.filter(author => author.use === 1).map(author => ({
+                authorId: author.authorId,
+            }))
+            /*
+            authors: this.state.addModal.authors
+                    .filter(author => author.use === 1)
+                    .map(author => ({
+                        authorId: author.authorId,                        
+                    }))  */
         })
         .then((res: ApiResponse) => {
             if (res.status === 'login') {

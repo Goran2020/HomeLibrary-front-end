@@ -6,7 +6,6 @@ import { faListAlt, faSearch } from '@fortawesome/free-solid-svg-icons';
 import api, { ApiResponse } from '../../api/api';
 import BookType from '../../types/BookType';
 import { Redirect, Link } from 'react-router-dom';
-import { ApiConfig } from '../../config/api.config';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 
 
@@ -47,6 +46,7 @@ interface BookDto {
     language: string;
     catalogNumber: string;
     photos: {
+        bookId: number;
         cover: string;
         imagePath: string;
     }[];
@@ -266,10 +266,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         return (
             <Col xs="12" sm="6" md="6" lg="4">
                 <Card className="mt-3">
-                    <Card.Header>
-                        <img alt={ book.title } src= { ApiConfig.PHOTO_PATH + 'small/' +  book.imageFront} 
-                        className="w-100" />
-                    </Card.Header>
+                    
                     <Card.Body>
                         <Card.Title as="p">
                             <strong>
@@ -393,19 +390,12 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                         isbn: book.isbn,
                         language: book.language,
                         catalogNumber: book.catalogNumber,
-                        imageBack: '',
-                        imageFront: ''                   
+                        imageUrl: '', 
+                        photos: book.photos                 
                         
                     }                   
                     
-                    if (book.photos && book.photos.length > 0) {
-                        for (let i = 0; i < book.photos.length; i++)
-                            if (book.photos[i].cover === 'front') {
-                                object.imageFront = book.photos[i].imagePath;
-                            } else {
-                                object.imageBack = book.photos[i].imagePath;
-                            }                           
-                    }
+                    
                     console.log(object);
                     return object;
                 })
