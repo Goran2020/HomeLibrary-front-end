@@ -200,3 +200,8 @@ async function repeatRequest (
         return resolve(response);
     });
 }
+
+export function removeTokenData(role: 'user') {
+    localStorage.removeItem('api_token');
+    localStorage.removeItem('api_refresh_token');
+}

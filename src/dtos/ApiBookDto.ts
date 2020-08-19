@@ -21,7 +21,7 @@ export default interface ApiBookDto {
         forename: string;
         surname: string;
     }[];
-    photos?: {
+    photos: {
         bookId: number;
         cover: string;
         imagePath: string;

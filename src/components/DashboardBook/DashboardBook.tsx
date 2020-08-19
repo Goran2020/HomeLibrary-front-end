@@ -1,9 +1,9 @@
 import React from 'react';
 import { Container, Card, Table, Button, Modal, Form, Alert, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faListAlt, faEdit, faPlus, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faListAlt, faEdit, faPlus, faSave, faImage } from '@fortawesome/free-solid-svg-icons';
 import BookType from '../../types/BookType';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 import api, { ApiResponse, apiFile } from '../../api/api';
 import ApiBookDto from '../../dtos/ApiBookDto';
@@ -351,8 +351,9 @@ class DashboardBook extends React.Component {
 		}
 		
 		const books: BookType[] | undefined = data?.map(book => {
-			return {
-				bookId: book.bookId,                
+            
+            const object = {
+                bookId: book.bookId,                
                 title: book.title,
                 originalTitle: book.originalTitle,
                 publicationYear: book.publicationYear,
@@ -367,8 +368,15 @@ class DashboardBook extends React.Component {
                 category: book.category,
                 location: book.location,
                 publisher: book.publisher,
-                
-			};
+                imageUrl: '',
+            }
+
+            if (book.photos !== undefined && book.photos.length > 0) {
+                object.imageUrl = book.photos[0].imagePath;
+            }
+            
+
+            return object;
 		});
 	
 
@@ -383,7 +391,7 @@ class DashboardBook extends React.Component {
 				this.setLoggedInState(false);
 				return;
 			}
-            console.log(res.data);
+            
             this.putBooksInState(res.data);
         });
         
@@ -397,7 +405,9 @@ class DashboardBook extends React.Component {
 				return;
 			}
             console.log(res.data);
-            this.putAuthorsInState(res.data);
+            this.putAuthorsInState(res.data);            
+            
+            return res.data;
         });
         
     } 
@@ -415,7 +425,7 @@ class DashboardBook extends React.Component {
                 forename: author.forename,
             }
         })
-        console.log("autori pre stavljanaj u stanje", authors)
+        
         this.setAuthors(authors);
     }  
 
@@ -461,10 +471,10 @@ class DashboardBook extends React.Component {
                             <Card.Title>
                                 <FontAwesomeIcon icon={ faListAlt } /> books
                             </Card.Title>
-                            <Table hover size="sm" bordered>
+                            <Table hover striped size="sm" bordered>
                                 <thead>
                                     <tr>
-                                        <th colSpan={ 8 }></th>
+                                        <th colSpan={ 13 }></th>
                                         <th className="text-center">
                                             <Button 
                                                 variant="primary" 
@@ -479,7 +489,7 @@ class DashboardBook extends React.Component {
                                         <th className="text-center">Title</th>
                                         <th>Category</th>
                                         <th>Author(s)</th>
-                                        <th>Publication Year</th>
+                                        <th>Year</th>
                                         <th>Publisher</th>
                                         <th>Pages</th>
                                         <th>ISBN</th>
@@ -487,7 +497,8 @@ class DashboardBook extends React.Component {
                                         <th>Language</th>
                                         <th>Catalog Number</th>
                                         <th>Location</th>
-                                        <th></th>                            
+                                        <th>Photos</th>  
+                                        <th></th>                          
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -505,7 +516,15 @@ class DashboardBook extends React.Component {
                                             <td> { book.language } </td>
                                             <td> { book.catalogNumber } </td>
                                             <td> { book.location?.room + " - " + book.location?.shelf } </td>
+                                            <td>
+                                                <Link to={ "/dashboard/photo/" + book.bookId }
+                                                        className="btn btn-sm btn-info mr-1">
+                                                        <FontAwesomeIcon icon={ faImage } /> Photos
+                                                </Link>
+                                                </td>
                                             <td className="text-center">
+
+                                                
                                                 <Button 
                                                     variant="info" 
                                                     size="sm"
@@ -550,7 +569,7 @@ class DashboardBook extends React.Component {
                                           onChange={ (e) => this.setAddModalStringFieldState('originalTitle', e.target.value) } >
                             </Form.Control>
                         </Form.Group>
-                        { console.log("broj autora u addModal state-u", this.state.addModal.authors.length) }   
+                           
                         <div>         { /* AUTHORS */}
                                                
 							{ this.state.addModal.authors.map(this.printAddModalAuthorInput ,this) }   { /* spisak autora */ }
@@ -681,7 +700,7 @@ class DashboardBook extends React.Component {
                                           onChange={ (e) => this.setEditModalStringFieldState('originalTitle', e.target.value) } >
                             </Form.Control>
                         </Form.Group>
-                        { console.log("Broj autora u state", this.state.authors.length) }  
+                        
                         <Form.Label>Author(s)</Form.Label>
                         <div>   
                                                
@@ -790,7 +809,7 @@ class DashboardBook extends React.Component {
                 break;
             }
         }
-        console.log("addAuthor", editAuthor);
+        
         this.setState(Object.assign(this.state,
             Object.assign(this.state.editModal, {
                 authors: editAuthor,
@@ -807,7 +826,7 @@ class DashboardBook extends React.Component {
                 break;
             }
         }
-        console.log("addAuthor", addAuthor);
+       
         this.setState(Object.assign(this.state,
             Object.assign(this.state.addModal, {
                 authors: addAuthor,
@@ -828,7 +847,7 @@ class DashboardBook extends React.Component {
                     onChange= { (e) => this.setAddModalAuthorUse(author.authorId, e.target.checked) } />
                 </Col>
                 <Col xs="10" sm="4">
-                    { author.forename + " " + author.surname }
+                    { author.forename + " " + author.surname + " " + author.use}
                 </Col>
                 
             </Row>           
@@ -896,7 +915,9 @@ class DashboardBook extends React.Component {
         }));
     }
 
-    private showEditModal(book: BookType) {
+    
+
+    private async showEditModal(book: BookType) {
         this.setEditModalStringFieldState('title', String(book.title));
         this.setEditModalStringFieldState('originalTitle', String(book.originalTitle));
         this.setEditModalNumberFieldState('publicationYear', String(book.publicationYear));
@@ -905,7 +926,7 @@ class DashboardBook extends React.Component {
         this.setEditModalStringFieldState('language', String(book.language));        
         this.setEditModalStringFieldState('message', '');
         this.setEditModalNumberFieldState('bookId', book.bookId ? book.bookId?.toString() : 'null');
-    
+               
         this.setEditModalVisible(true);
     }
 
@@ -935,7 +956,7 @@ class DashboardBook extends React.Component {
             publisherId: this.state.editModal.publisherId,
             isVisible: this.state.editModal.isVisible,
             locationId: this.state.editModal.locationId,
-            authors: this.state.editModal.authors.filter(author => author.use === 1).map(author => ({
+            authors: this.state.addModal.authors.filter(author => author.use === 1).map(author => ({
                 authorId: author.authorId,
             }))
             

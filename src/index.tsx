@@ -19,6 +19,12 @@ import DashboardBook from './components/DashboardBook/DashboardBook';
 import DashboardLocation from './components/DashboardLocation/DashboardLocation';
 import DashboardPublisher from './components/DashboardPublisher/DashboardPublisher';
 import DashboardAuthor from './components/DashboardAuthor/DashboardAuthor';
+import DashboardPhoto from './components/DashboardPhoto/DashboardPhoto';
+import BookPage from './components/BookPage/BookPage';
+import { LogoutPage } from './components/LogoutPage/LogoutPage';
+
+
+
 
 
 /*
@@ -40,14 +46,17 @@ ReactDOM.render(
         <Route exact path="/" component={ HomePage} />
         <Route path="/contact" component={ ContactPage } />
         <Route path="/login" component={ UserLoginPage } />
+        <Route path="/logout" component={ LogoutPage } />
         <Route path="/register" component={ UserRegistrationPage } />
         <Route path="/category/:cId" component={ CategoryPage } />
+        <Route path="/book/:bookId" component={ BookPage } />
         <Route exact path="/dashboard/" component={ UserDashboard } />
         <Route path="/dashboard/category" component={ DashboardCategory } />
         <Route path="/dashboard/book/" component={ DashboardBook } />
         <Route path="/dashboard/location/" component={ DashboardLocation } />
         <Route path="/dashboard/publisher/" component={ DashboardPublisher } />
-        <Route path="/dashboard/author/" component={ DashboardAuthor } />
+        <Route path="/dashboard/author/" component={ DashboardAuthor } /> 
+        <Route path="/dashboard/photo/:bookId" component={ DashboardPhoto } /> 
       </Switch>    
     </HashRouter>
   </React.StrictMode>,

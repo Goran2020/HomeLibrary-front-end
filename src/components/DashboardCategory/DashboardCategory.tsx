@@ -216,6 +216,7 @@ class DashboardCategory extends React.Component {
                                 <FontAwesomeIcon icon={ faPlus } /> Add new Category 
                             </Button>
                         </Form.Group>
+                        
                         { this.state.addModal.message ? 
                             ( <Alert variant="danger" value={ this.state.addModal.message } /> ) : ''
                         }
@@ -243,7 +244,9 @@ class DashboardCategory extends React.Component {
                                 <FontAwesomeIcon icon={ faEdit } /> Edit Category 
                             </Button>
                         </Form.Group>
+                        
                         { this.state.editModal.message ? 
+                            
                             ( <Alert variant="danger" value={ this.state.addModal.message } /> ) : ''
                         }
                     </Modal.Body>
@@ -265,7 +268,8 @@ class DashboardCategory extends React.Component {
             }
 
             if (res.status === 'error') {
-                return this.setMessage('Please wait...or try to refresh');
+                this.setAddModalStringFieldState('message','Please wait...or try to refresh');
+                return;
             }
 
             this.setAddModalVisible(false);
@@ -288,9 +292,9 @@ class DashboardCategory extends React.Component {
     }
 
     private showAddModal() {
-        this.setAddModalStringFieldState('name', '');
-        this.setAddModalVisible(true);
+        this.setAddModalStringFieldState('name', '');        
         this.setAddModalStringFieldState('message', '');
+        this.setAddModalVisible(true);
     } 
     
     private doEditCategory() {
@@ -303,7 +307,8 @@ class DashboardCategory extends React.Component {
             }
 
             if (res.status === 'error') {
-                return this.setMessage('Please wait...or try to refresh');
+                this.setAddModalStringFieldState('message', 'Please wait...or try to refresh');
+                return;
             }
 
             this.setEditModalVisible(false);

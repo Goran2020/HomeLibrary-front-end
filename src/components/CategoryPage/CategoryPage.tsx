@@ -5,8 +5,9 @@ import CategoryType from '../../types/CategoryType';
 import { faListAlt, faSearch } from '@fortawesome/free-solid-svg-icons';
 import api, { ApiResponse } from '../../api/api';
 import BookType from '../../types/BookType';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
+import BookPreview from '../BookPreview/BookPreview';
 
 
 interface CategoryPageProperties {
@@ -260,8 +261,14 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         });
  
         this.setState(newState);
-     }
+    }
 
+    private singleBook(book: BookType) {
+        return (
+            <BookPreview book={book} />
+        );
+    }
+    /*
     private singleBook(book: BookType) {
         return (
             <Col xs="12" sm="6" md="6" lg="4">
@@ -282,7 +289,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                 </Card>
             </Col>
         );
-    }
+    }  */
 
     private showBooks() {
         if (this.state.books?.length === 0) {
@@ -393,10 +400,18 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                         imageUrl: '', 
                         photos: book.photos                 
                         
-                    }                   
+                    }       
+                    
+                    if (book.photos !== undefined && book.photos?.length > 0) {
+                        for (let photo of book.photos) {
+                            if (photo.cover === 'front') {
+                                object.imageUrl = photo.imagePath;
+                            }
+                        }
+                    }
                     
                     
-                    console.log(object);
+                    console.log("book.photos:", book.photos);
                     return object;
                 })
                 

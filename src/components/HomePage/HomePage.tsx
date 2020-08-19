@@ -31,11 +31,11 @@ class HomePage extends React.Component {
     componentWillMount() {
         this.getCategories();
 	}
-	
+	/*
 	componentWillUpdate() {
 		this.getCategories();
 	}
-
+  */
     private getCategories() {
 		api('api/category/', 'get', {})
 		.then((res: ApiResponse) => {

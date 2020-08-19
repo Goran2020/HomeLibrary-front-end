@@ -64,13 +64,13 @@ class UserDashboard extends React.Component {
                       <Card.Title>
                           <FontAwesomeIcon icon={ faHome } /> User Dashboard
                       </Card.Title>
-	  				        <ul>
+                            <ul>
                                 <li><Link to="/dashboard/category/">Categories</Link></li>
                                 <li><Link to="/dashboard/book">Book</Link></li>
                                 <li><Link to="/dashboard/publisher">Publisher</Link></li>
                                 <li><Link to="/dashboard/location">Location</Link></li>
                                 <li><Link to="/dashboard/author">Author</Link></li>
-                            </ul>
+                            </ul>                
                   </Card.Body>
               </Card>
           </Container>
