@@ -1,12 +1,13 @@
 import React from 'react';
 import ApiBookDto from '../../dtos/ApiBookDto';
 import api, { ApiResponse } from '../../api/api';
-import { Redirect, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Container, Card, Nav, Row, Col, ListGroup } from 'react-bootstrap';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookOpen, faBackward } from '@fortawesome/free-solid-svg-icons';
 import { ApiConfig } from '../../config/api.config';
+
 
 interface BookPageProperties {
     match: {
@@ -16,7 +17,7 @@ interface BookPageProperties {
     }
 }
 interface BookPageState {
-    isUserLoggedIn: boolean;
+    //isUserLoggedIn: boolean;
     message: string;
     book?: ApiBookDto;
 }
@@ -28,8 +29,10 @@ export default class BookPage extends React.Component<BookPageProperties> {
         super(props);
 
         this.state = {
-            isUserLoggedIn: true,
-            message: ''
+            //isUserLoggedIn: true,
+            message: '',
+            book: undefined
+
         }
     }
 
@@ -49,14 +52,15 @@ export default class BookPage extends React.Component<BookPageProperties> {
     }
 
     render() {
+        /*
         if (this.state.isUserLoggedIn === false) {        
             return (
                 <Redirect to="/login" />
             );
-        }
+        }  */
         return (
             <Container>
-                <RoledMainMenu role='user' />
+                <RoledMainMenu role='visitor' />
                 <Card>
                     <Card.Body>
                         <Nav className="mb-3">
@@ -94,7 +98,7 @@ export default class BookPage extends React.Component<BookPageProperties> {
                                 <Card className="mb-4">
                                     <Card.Title className="text-center mt-4">Cover Front</Card.Title>
                                     <Card.Body>
-                                        <img alt="" src={ ApiConfig.PHOTO_PATH + 'small/' + this.state.book?.photos[0].imagePath } className="w-100"/>
+                                        {<img alt="" src={ ApiConfig.PHOTO_PATH + 'small/' + this.state.book?.photos[0].imagePath } className="w-100"/> }                                      
                                     </Card.Body>
                                     
                                 </Card>
@@ -102,7 +106,7 @@ export default class BookPage extends React.Component<BookPageProperties> {
                                 <Card>
                                     <Card.Title className="text-center mt-4">Cover back</Card.Title>
                                     <Card.Body>
-                                        <img alt="" src={ ApiConfig.PHOTO_PATH + 'small/' + this.state.book?.photos[0].imagePath } className="w-100"/>
+                                    <img alt="" src={ ApiConfig.PHOTO_PATH + 'small/' + this.state.book?.photos[0].imagePath } className="w-100"/> 
                                     </Card.Body>                                    
                                 </Card>
                             </Col>                           
@@ -127,11 +131,12 @@ export default class BookPage extends React.Component<BookPageProperties> {
     }
 
     private getBookData() {
-        api('/api/book/' + this.props.match.params.bookId, 'get', {})
+        api('visitor/book/' + this.props.match.params.bookId, 'get', {})
         .then((res: ApiResponse) => {
+            /*
             if (res.status === 'login') {
                 return this.setLoggedInState(false);				
-            }
+            }*/
             
             if (res.status === 'error') {
                 return this.setMessage("This book doesn't exist.");

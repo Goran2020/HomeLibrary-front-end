@@ -130,7 +130,7 @@ class DashboardCategory extends React.Component {
 	}
 
     private getCetgories() {
-        api('/api/category', 'get', {})
+        api('api/category', 'get', {})
         .then((res: ApiResponse) => {
             if (res.status === 'error' || res.status === 'login') {
 				this.setLoggedInState(false);

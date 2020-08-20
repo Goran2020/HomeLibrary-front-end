@@ -5,7 +5,6 @@ import CategoryType from '../../types/CategoryType';
 import { faListAlt, faSearch } from '@fortawesome/free-solid-svg-icons';
 import api, { ApiResponse } from '../../api/api';
 import BookType from '../../types/BookType';
-import { Redirect } from 'react-router-dom';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 import BookPreview from '../BookPreview/BookPreview';
 
@@ -19,7 +18,7 @@ interface CategoryPageProperties {
 }
 
 interface CategoryPageState {
-    isUserLoggedIn?: boolean;
+    //isUserLoggedIn?: boolean;
     category?: CategoryType;
     books?: BookType[];
     title?: string;
@@ -61,7 +60,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         super(props);
 
         this.state = {
-            isUserLoggedIn: true,
+            //isUserLoggedIn: true,
             message: '',
             books: [],                  
             filters: {
@@ -77,14 +76,14 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
     };   
 
     render() {
-        if (this.state.isUserLoggedIn === false) {        
+    /*    if (this.state.isUserLoggedIn === false) {        
             return (
                 <Redirect to="/login" />
             );
-        }
+        } */
         return (
             <Container>
-                <RoledMainMenu role='user' />
+                <RoledMainMenu role='visitor' />
                 <Card>
                     <Card.Body>
                         <Card.Title>
@@ -307,10 +306,11 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         );
     }
     
-    // pretraga po autoru - dopremanje authorId-a i setovanje u stanje komponente //
+    // pretraga po autoru - dopremanje authorId-a i setovanje u stanje komponente /
+    
     private getAuthorId() {
         
-            api('api/author/findOne','post', {
+            api('visitor/findOne','post', {
                 forename: this.state.filters.forename,
                 surname: this.state.filters.surname,
             })
@@ -323,21 +323,21 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                     return this.setMessage('Please wait...or try to refresh');
                 }
                 
-                const authorId: number = res.data.authorId;
-                console.log("ovo je autorId", authorId);
+                const authorId: number = res.data.authorId;                
                 this.setAuhtorIdState(authorId);            
             });   
         
             
-    }
+    }  
     
     private getCategoryData() {
         
-        api('api/category/' + this.props.match.params.cId, 'get', {})
+        api('visitor/category/' + this.props.match.params.cId, 'get', {})
         .then((res: ApiResponse) => {
+            /*
             if (res.status === 'login') {
 				return this.setLoggedInState(false);				
-            }
+            }*/
             
             if (res.status === 'error') {
                 return this.setMessage('Please wait...or try to refresh');
@@ -360,7 +360,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         this.getAuthorId(); // ovo treba da setuje authorId kada se izvrši pretraga
         
         
-        api('api/book/search/', 'post', {
+        api('visitor/search/', 'post', {
             categoryId: Number(this.props.match.params.cId),            
             keywords: this.state.filters?.keywords,
             title: this.state.filters?.title,            
@@ -372,10 +372,10 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
             itemsPerPage: 10
         })
         .then((res: ApiResponse) => {
-            
+            /*
             if (res.status === 'login') {
                 return this.setLoggedInState(false);
-            }
+            }*/
 
             if (res.status === 'error') {
                 return this.setMessage('Request Error');
@@ -408,10 +408,9 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                                 object.imageUrl = photo.imagePath;
                             }
                         }
-                    }
+                    }               
                     
                     
-                    console.log("book.photos:", book.photos);
                     return object;
                 })
                 

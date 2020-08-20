@@ -106,7 +106,7 @@ export default class UserLoginPage extends React.Component {
         if (this.state.isLoggedIn === true) {
             console.log("Uspešan login");
             return (
-                <Redirect to="/" />
+                <Redirect to="/dashboard/" />
             );
         }
         return (

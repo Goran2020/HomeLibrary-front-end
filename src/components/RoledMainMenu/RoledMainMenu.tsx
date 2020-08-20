@@ -19,9 +19,7 @@ export default class RoledMainMenu extends React.Component<RoledMainMenuProperti
     }
 
     private getUserMenuItems(): MainMenuItem[] {
-        return [
-            new MainMenuItem("Home", "/"), 
-            new MainMenuItem("Contact", "/contact/"), 
+        return [                    
             new MainMenuItem("Log Out", "/logout/"),
             new MainMenuItem("User Dashboard", "/dashboard/"),                       
         ];
@@ -30,8 +28,7 @@ export default class RoledMainMenu extends React.Component<RoledMainMenuProperti
     private getVisitorMenuItems(): MainMenuItem[] {
         return [
             new MainMenuItem("Home", "/"),  
-            new MainMenuItem("Log in", "/login/"),
-            new MainMenuItem("Contact", "/contact/"),
+            new MainMenuItem("Log in", "/login/"),            
             new MainMenuItem("Register", "/register/"),
         ];
     }

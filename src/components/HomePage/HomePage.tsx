@@ -3,7 +3,7 @@ import { Container, Card, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListAlt } from '@fortawesome/free-solid-svg-icons';
 import CategoryType from '../../types/CategoryType';
-import { Redirect, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import api, { ApiResponse } from '../../api/api';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 import ApiCategoryDto from '../../dtos/ApiCategoryDto';
@@ -11,7 +11,7 @@ import ApiCategoryDto from '../../dtos/ApiCategoryDto';
 
 
 interface HomePageState {
-  isUserLoggedIn: boolean;
+  //isUserLoggedIn: boolean;
   categories?: CategoryType[];
 }
 
@@ -23,7 +23,7 @@ class HomePage extends React.Component {
       super(props);
 
       this.state = {
-        isUserLoggedIn: true,
+        //isUserLoggedIn: true,
         categories: [],
       }
     }
@@ -37,12 +37,12 @@ class HomePage extends React.Component {
 	}
   */
     private getCategories() {
-		api('api/category/', 'get', {})
+		api('visitor/category/', 'get', {})    // K O R I S N I K
 		.then((res: ApiResponse) => {
 			//console.log(res);
 
 			if (res.status === 'error' || res.status === 'login') {
-				this.setLoggedInState(false);
+				//this.setLoggedInState(false);
 				return;
 			}
 
@@ -81,14 +81,14 @@ class HomePage extends React.Component {
 
 
     render() {
-		if (this.state.isUserLoggedIn === false) {        
+/*		if (this.state.isUserLoggedIn === false) {        
 			return (
 				<Redirect to="/login" />
         );
-    }
+    }  */
       return (
           <Container>
-            <RoledMainMenu role="user" /> 
+            <RoledMainMenu role="visitor" /> 
               <Card>
                   <Card.Body>
                       <Card.Title>
