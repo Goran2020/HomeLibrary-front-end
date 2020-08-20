@@ -49,6 +49,57 @@ export default function api (
     });    
 }
 
+export function apiFile (
+    path: string,
+    name: string,     
+    file: File,
+) { 
+    return new Promise<ApiResponse>((resolve) => {
+        const formData = new FormData();
+        formData.append(name, file);
+
+        const requestData: AxiosRequestConfig = {
+            method: 'post',
+            url: path,
+            baseURL: ApiConfig.API_URL,
+            data: formData,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': getToken(),
+            }
+        };
+
+        axios(requestData)  // uspostavlja se request prema API-ju
+        .then(res => responseHandler(res, resolve))  // stiže response šalje se responseHandleru
+        .catch(async err => {
+            if (err.response.status === 401) { // pozvati refresh token
+                const newToken = await refreshToken();
+    
+                if (!newToken) {
+                    const response: ApiResponse = {
+                        status: 'login',
+                        data: null
+                    };
+                    
+                    return resolve(response);
+                }
+    
+                saveToken(newToken);
+    
+                requestData.headers['Authorization'] = getToken();
+    
+                return await repeatRequest(requestData, resolve);
+            }
+            const response: ApiResponse = {
+                status: 'error',
+                data: err
+            };
+
+            resolve(response);
+        });
+    });    
+}
+
 export interface ApiResponse {
     status: 'ok' | 'error' | 'login';
     data: any;
@@ -148,4 +199,9 @@ async function repeatRequest (
         
         return resolve(response);
     });
+}
+
+export function removeTokenData(role: 'user') {
+    localStorage.removeItem('api_token');
+    localStorage.removeItem('api_refresh_token');
 }
