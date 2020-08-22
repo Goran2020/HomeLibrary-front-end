@@ -506,8 +506,10 @@ class DashboardBook extends React.Component {
                                         <tr>
                                             <td className="text-center">{ book.bookId }</td>
                                             <td className="text-center">{ book.title }</td>
-                                            <td>{ book.category?.name }</td> 
-                                            <td>{ book.authors?.length }</td>                                          
+                                            <td>{ book.category?.name }</td>                                               
+                                            <td>  { /* ovde idu autori*/ } 
+                                                { book.authors?.map(author => (author.forename + " " + author.surname + ",\n" )) }
+                                             </td>                 
                                             <td>{ book.publicationYear }</td>
                                             <td>{ book.publisher?.name }</td>
                                             <td>{ book.pages }</td>
@@ -515,7 +517,7 @@ class DashboardBook extends React.Component {
                                             <td>{ book.isVisible === 0 ? 'hiden' : 'visible' }</td>                                 
                                             <td> { book.language } </td>
                                             <td> { book.catalogNumber } </td>
-                                            <td> { book.location?.room + " - " + book.location?.shelf } </td>
+                                            <td> {  book.location?.room + " - " + book.location?.shelf } </td>
                                             <td>
                                                 <Link to={ "/dashboard/photo/" + book.bookId }
                                                         className="btn btn-sm btn-info mr-1">

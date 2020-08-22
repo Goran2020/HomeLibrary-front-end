@@ -79,7 +79,7 @@ export default class BookPage extends React.Component<BookPageProperties> {
                             <Col xs="12" md="4" lg="5">
                                 <Card>
                                     <Card.Body>                                        
-                                        <ListGroup>
+                                        <ListGroup className="mb-3">
                                             <ListGroup.Item><strong>Original title:</strong> { this.state.book?.originalTitle }</ListGroup.Item>
                                             <ListGroup.Item><strong>Publication year:</strong> { this.state.book?.publicationYear }</ListGroup.Item>
                                             <ListGroup.Item><strong>Pages: </strong>{ this.state.book?.pages }</ListGroup.Item>
@@ -90,7 +90,13 @@ export default class BookPage extends React.Component<BookPageProperties> {
                                             <ListGroup.Item><strong>Category: </strong>{ this.state.book?.category?.name }</ListGroup.Item>
                                             <ListGroup.Item><strong>Publisher: </strong>{ this.state.book?.publisher?.name }</ListGroup.Item>
                                             <ListGroup.Item><strong>Location: </strong>{ this.state.book?.location?.room + " - " + this.state.book?.location?.shelf }</ListGroup.Item>
-                                        </ListGroup>                                       
+                                        </ListGroup>  
+                                        <Card.Text><strong>Authors</strong></Card.Text>
+                                        <ListGroup>  { /* AUTHORS */}     
+                                            { this.state.book?.authors?.map(author => (<ListGroup.Item> {author?.forename + " " + author?.surname}</ListGroup.Item>)
+                                                
+                                            ) }
+                                        </ListGroup>     
                                     </Card.Body>
                                 </Card>
                             </Col>

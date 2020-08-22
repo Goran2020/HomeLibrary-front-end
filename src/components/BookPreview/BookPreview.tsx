@@ -12,23 +12,31 @@ interface BookPreviewProperties {
 export default class BookPreview extends React.Component<BookPreviewProperties> {
     
 
-    render () {
-        return (
-            <Col lg="4" md="6" sm="6" xs="12">
-                <Card className="mb-3">
-                    <Card.Header>
-                        <img alt={ this.props.book.title } 
-                             src={ ApiConfig.PHOTO_PATH + 'small/' + this.props.book.imageUrl } 
-                             className="w-100" />
-                    </Card.Header>
-                    <Card.Body>
-                    <Card.Title as="p"><strong>{ this.props.book.title }</strong></Card.Title>
-                    <Card.Text> { this.props.book.publisher } </Card.Text>
-                    <Card.Text> { this.props.book.publicationYear } </Card.Text>
-                    <Link to={ `/book/${ this.props.book.bookId }` } className="btn btn-primary btn-block btn-sm">Open for more Details</Link>
-                    </Card.Body>
-                </Card>
-            </Col>
-        )
+    render () {  
+        
+        if (this.props.book.isVisible !== 0) {  // proveri da li je status knjige 1 | 0 tj dostupan za pregled korisniku
+            return (
+           
+            
+                <Col lg="4" md="6" sm="6" xs="12">
+                    <Card className="mb-3">
+                        <Card.Header>
+                            <img alt={ this.props.book.title } 
+                                 src={ ApiConfig.PHOTO_PATH + 'small/' + this.props.book.imageUrl } 
+                                 className="w-100" />
+                        </Card.Header>
+                        <Card.Body>
+                        <Card.Title as="p"><strong>{ this.props.book.title }</strong></Card.Title>
+                        <Card.Text> { this.props.book.publisher?.name } </Card.Text>
+                        <Card.Text> { this.props.book.publicationYear } </Card.Text>                        
+                        <Link to={ `/book/${ this.props.book.bookId }` } className="btn btn-primary btn-block btn-sm">Open for more Details</Link>                        
+                        </Card.Body>
+                    </Card>
+                </Col>
+            )
+        }  
+
+        return (<></>);
+        
     }
 }

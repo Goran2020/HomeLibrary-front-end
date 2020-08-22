@@ -7,6 +7,8 @@ import api, { ApiResponse } from '../../api/api';
 import BookType from '../../types/BookType';
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 import BookPreview from '../BookPreview/BookPreview';
+import ApiAuthorDto from '../../dtos/ApiAuthorDto';
+import AuthorType from '../../types/AuthorType';
 
 
 interface CategoryPageProperties {
@@ -22,17 +24,18 @@ interface CategoryPageState {
     category?: CategoryType;
     books?: BookType[];
     title?: string;
-    forename?: string;
-    surname?: string;
+    authors?: {
+        authorId: number;
+        forename: string;
+        surname: string;
+    }[];    
     authorId?: number;
     message?: string;
     filters: {
         keywords: string;
         title: string;
         publicationYear: number | null;
-        authorId: number;
-        forename: string;
-        surname: string;
+        authorId: number;        
         order: "title asc" | "title desc" | "authors acs";
     };
 }
@@ -42,6 +45,7 @@ interface BookDto {
     title: string;
     originalTitle: string;
     publicationYear: number;
+    isVisible: number;    
     pages: number;
     isbn: string;
     language: string;
@@ -63,14 +67,13 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         this.state = {
             //isUserLoggedIn: true,
             message: '',
-            books: [],                  
+            books: [],
+            authors: [],                  
             filters: {
                 keywords: '',
                 title: '',
                 publicationYear: null,
-                authorId: 0,     
-                forename: '',
-                surname: '',
+                authorId: 19,                
                 order: 'title asc',
             }
 
@@ -155,6 +158,13 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         this.getCategoryData();
         
     }
+    private setAddModalNumberFieldState(fieldName: string, newValue: string) {
+        this.setState(Object.assign(this.state,
+            Object.assign(this.state.filters, {
+                [ fieldName ]: (newValue === 'null') ? null : Number(newValue),
+            }),            
+        ));
+    }  
 
     private printFilters() {
         return (
@@ -182,7 +192,24 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                                          value={ this.state.filters?.publicationYear === null ? '' :  this.state.filters?.publicationYear} 
                                          onChange={ (e) => this.filterYearChange(e as any) } />
                        </Col>
-                       <Col xs="12" sm="12">
+                       <Col>
+                            <Form.Group>  {/* AUTHOR   */ }  
+                                    <Form.Label htmlFor="author">Author</Form.Label> <FontAwesomeIcon icon={ faSearch } />
+                                    <Form.Control id="author" 
+                                                as="select" 
+                                                value={ this.state.filters.authorId.toString() } 
+                                                onChange={ (e) => this.setAddModalNumberFieldState('authorId', e.target.value) } >
+                                                { this.state.authors?.map(author => (                                                    
+                                                    <option value={ author.authorId?.toString() }>
+                                                        { author.forename + " " + author.surname }
+                                                    </option>
+                                                ) ) }
+                                    </Form.Control>
+                                </Form.Group>
+                       </Col>
+                       
+                       {/* 
+                        <Col xs="12" sm="12">
                             <Form.Label htmlFor="forename">Forename</Form.Label> <FontAwesomeIcon icon={ faSearch } />
                            <Form.Control type="text" 
                                          id="forename" 
@@ -196,6 +223,8 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                                          value={ this.state.filters?.surname } 
                                          onChange={ (e) => this.filterSurnameChange(e as any) } />
                        </Col>
+                       */}
+                       
                    </Row>
                </Form.Group>
                <Form.Group>
@@ -236,7 +265,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
     }
 
     componentDidMount() {  
-        
+        this.getAuthors();
         this.getCategoryData();
         
     }
@@ -245,9 +274,46 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         if (oldProperties.match.params.cId === this.props.match.params.cId) {
             return;
         }     
-        
+        this.getAuthors();
         this.getCategoryData();
         
+    }
+
+    private setAuthors(authors: AuthorType[]) {
+		this.setState(Object.assign(this.state, {
+            authors: authors,
+		}));
+    }
+
+    private setAuthorsInState(data: ApiAuthorDto[]) {
+        if (!data || data.length === 0) {
+			this.setAuthors([]);
+			return;
+        } 
+        
+        const authors: AuthorType[] | undefined = data?.map(author => {
+			return {
+				authorId: author.authorId,
+                forename: author.forename,
+                surname: author.surname,				
+			};
+		});
+	
+        
+		this.setAuthors(authors);
+    }
+
+    private getAuthors() {
+        api('visitor/authors','get', {})
+        .then((res: ApiResponse) => {
+            
+            if (res.status === 'error') {
+                return this.setMessage('Please wait...or try to refresh');
+            }
+            
+            const authors: ApiAuthorDto[] = res.data;                
+            this.setAuthorsInState(authors);            
+        });   
     }
 
     private setBooks(books: BookType[]) {
@@ -277,6 +343,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
     }
 
     private singleBook(book: BookType) {
+        
         return (
             <BookPreview book={book} />
         );
@@ -314,14 +381,15 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         }
 
         return (
-            <Row>
+            
+            <Row>                
                 { this.state.books?.map(this.singleBook) }
             </Row>
         );
     }
     
     // pretraga po autoru - dopremanje authorId-a i setovanje u stanje komponente /
-    
+    /*
     private getAuthorId() {
         
             api('visitor/findOne','post', {
@@ -342,7 +410,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
             });   
         
             
-    }  
+    }  */
 
 
     
@@ -373,9 +441,9 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         const orderDirection = orderParts[1].toUpperCase();
 
          
-        this.getAuthorId(); // ovo treba da setuje authorId kada se izvrši pretraga
+        //this.getAuthorId(); // ovo treba da setuje authorId kada se izvrši pretraga
         
-        console.log(this.state.filters.publicationYear);
+        
         api('visitor/search/', 'post', {
 
             
@@ -412,10 +480,11 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                         originalTitle: book.originalTitle,
                         publicationYear: book.publicationYear,
                         pages: book.pages,
+                        isVisible: book.isVisible,
                         isbn: book.isbn,
                         language: book.language,
                         catalogNumber: book.catalogNumber,
-                        imageUrl: '', 
+                        imageUrl: '',                        
                         photos: book.photos                 
                         
                     }       
