@@ -29,6 +29,7 @@ interface CategoryPageState {
     filters: {
         keywords: string;
         title: string;
+        publicationYear: number | null;
         authorId: number;
         forename: string;
         surname: string;
@@ -66,6 +67,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
             filters: {
                 keywords: '',
                 title: '',
+                publicationYear: null,
                 authorId: 0,     
                 forename: '',
                 surname: '',
@@ -124,6 +126,11 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
             title: event.target.value,
         }));
     }
+    private filterYearChange(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setNewFilter(Object.assign(this.state.filters, {
+            publicationYear: Number(event.target.value),
+        }));
+    }
 
     private filterOrderChanged(event: React.ChangeEvent<HTMLSelectElement>) {
         this.setNewFilter(Object.assign(this.state.filters, {
@@ -152,7 +159,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
     private printFilters() {
         return (
             <>
-               <Form.Group>
+               <Form.Group>                    { /* KEYWORDS */ }
                    <Form.Label htmlFor="keywords">Keywords</Form.Label> <FontAwesomeIcon icon={ faSearch } />
                    <Form.Control type="text" 
                                  id="keywords" 
@@ -161,12 +168,19 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                </Form.Group>
                <Form.Group>
                    <Row>
-                       <Col xs="12" sm="12">
+                       <Col xs="12" sm="12">  { /* TITLE */ }
                             <Form.Label htmlFor="title">Title</Form.Label> <FontAwesomeIcon icon={ faSearch } />
                            <Form.Control type="text" 
                                          id="title" 
                                          value={ this.state.filters?.title } 
                                          onChange={ (e) => this.filterTitleChange(e as any) } />
+                       </Col>
+                       <Col xs="12" sm="12">  { /* YEAR */ }
+                            <Form.Label htmlFor="year">Publication year</Form.Label> <FontAwesomeIcon icon={ faSearch } />
+                           <Form.Control type="text" 
+                                         id="year" 
+                                         value={ this.state.filters?.publicationYear === null ? '' :  this.state.filters?.publicationYear} 
+                                         onChange={ (e) => this.filterYearChange(e as any) } />
                        </Col>
                        <Col xs="12" sm="12">
                             <Form.Label htmlFor="forename">Forename</Form.Label> <FontAwesomeIcon icon={ faSearch } />
@@ -329,6 +343,8 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
         
             
     }  
+
+
     
     private getCategoryData() {
         
@@ -359,13 +375,15 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
          
         this.getAuthorId(); // ovo treba da setuje authorId kada se izvrši pretraga
         
-        
+        console.log(this.state.filters.publicationYear);
         api('visitor/search/', 'post', {
+
+            
             categoryId: Number(this.props.match.params.cId),            
             keywords: this.state.filters?.keywords,
             title: this.state.filters?.title,            
             authorId: this.state.filters?.authorId,
-            publicationYear: 0,
+            publicationYear: this.state.filters.publicationYear,
             orderBy: orderBy,
             orderDirection: orderDirection, 
             page: 0,
