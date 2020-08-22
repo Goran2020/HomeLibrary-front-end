@@ -908,6 +908,7 @@ class DashboardBook extends React.Component {
     }
 
     private async uploadBookPhoto(bookId: number, file: File) {
+        
         return await apiFile('api/book/' + bookId + '/uploadPhoto/', 'photo', file);
     }
 

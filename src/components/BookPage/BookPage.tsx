@@ -111,8 +111,9 @@ export default class BookPage extends React.Component<BookPageProperties> {
                                 
                                 <Card>
                                     <Card.Title className="text-center mt-4">Cover back</Card.Title>
-                                    <Card.Body>
-                                    <img alt="" src={ ApiConfig.PHOTO_PATH + 'small/' + this.state.book?.photos[0].imagePath } className="w-100"/> 
+                                    <Card.Body>                                        
+                                        {<img alt="" src={ ApiConfig.PHOTO_PATH + 'thumb/2020822-8652156860-blank.jpg' } className="w-100"/> } 
+                                    <Card.Text className="text-center">no cover to show.</Card.Text>
                                     </Card.Body>                                    
                                 </Card>
                             </Col>                           

@@ -1,6 +1,7 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { ApiConfig } from '../config/api.config';
 
+
 export default function api (
     path: string, 
     method: 'get' | 'post' | 'patch' | 'delete',
@@ -53,6 +54,7 @@ export function apiFile (
     path: string,
     name: string,     
     file: File,
+    
 ) { 
     return new Promise<ApiResponse>((resolve) => {
         const formData = new FormData();
