@@ -32,7 +32,7 @@ export class UserRegistrationPage extends React.Component {
         return (
             <Container>
                 <RoledMainMenu role="visitor" />
-                <Col md={ { span: 8, offset: 2} }>
+                <Col md={ { span: 6, offset: 3} }>
                     <Card>
                         <Card.Body>
                             <Card.Title>

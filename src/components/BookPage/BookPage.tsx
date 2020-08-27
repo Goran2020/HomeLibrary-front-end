@@ -85,8 +85,7 @@ export default class BookPage extends React.Component<BookPageProperties> {
                                             <ListGroup.Item><strong>Pages: </strong>{ this.state.book?.pages }</ListGroup.Item>
                                             <ListGroup.Item><strong>ISBN: </strong>{ this.state.book?.isbn }</ListGroup.Item>
                                             <ListGroup.Item><strong>Language: </strong>{ this.state.book?.language }</ListGroup.Item>
-                                            <ListGroup.Item><strong>Catalog number: </strong>{ this.state.book?.catalogNumber }</ListGroup.Item>
-                                            <ListGroup.Item><strong>Language: </strong>{ this.state.book?.language }</ListGroup.Item>
+                                            <ListGroup.Item><strong>Catalog number: </strong>{ this.state.book?.catalogNumber }</ListGroup.Item>                                            
                                             <ListGroup.Item><strong>Category: </strong>{ this.state.book?.category?.name }</ListGroup.Item>
                                             <ListGroup.Item><strong>Publisher: </strong>{ this.state.book?.publisher?.name }</ListGroup.Item>
                                             <ListGroup.Item><strong>Location: </strong>{ this.state.book?.location?.room + " - " + this.state.book?.location?.shelf }</ListGroup.Item>
