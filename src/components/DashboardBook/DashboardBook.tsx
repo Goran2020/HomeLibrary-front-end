@@ -893,7 +893,7 @@ class DashboardBook extends React.Component {
 
             const file = filePhoto.files[0];
             
-            await this.uploadBookPhoto(bookId, file);
+            await this.uploadBookPhoto(bookId, file, "front"); // ovde dodato "front" --------add-----------
             /*
             const res2 = await this.uploadBookPhoto(bookId, file);
             if (res.status !== 'ok') {
@@ -907,9 +907,9 @@ class DashboardBook extends React.Component {
         });
     }
 
-    private async uploadBookPhoto(bookId: number, file: File) {
-        
-        return await apiFile('api/book/' + bookId + '/uploadPhoto/', 'photo', file);
+    private async uploadBookPhoto(bookId: number, file: File, cover: string) { // ovde dodato cover: string --------add-----------
+        return await apiFile('api/book/' + bookId + '/uploadPhoto/' + cover, 'photo', file);
+        // return await apiFile('api/book/' + bookId + '/uploadPhoto/', 'photo', file);  --------add-----------
     }
 
     private setMessage(message: string) {

@@ -99,20 +99,21 @@ export default class BookPage extends React.Component<BookPageProperties> {
                                     </Card.Body>
                                 </Card>
                             </Col>
-                            <Col xs="12" md="4" lg="3">                                
+                            <Col xs="12" md="4" lg="3" className="text-center">                                
                                 <Card className="mb-4">
-                                    <Card.Title className="text-center mt-4">Cover Front</Card.Title>
+                                    <Card.Title className="mt-4">Cover Front</Card.Title>
                                     <Card.Body>
-                                        {<img alt="" src={ ApiConfig.PHOTO_PATH + 'small/' + this.state.book?.photos[0].imagePath } className="w-100"/> }                                      
+                                        {<img alt="Front cover" src={ ApiConfig.PHOTO_PATH + 'small/' + this.state.book?.photos[0].imagePath } className="w-100"/> }                                      
                                     </Card.Body>
                                     
                                 </Card>
                                 
                                 <Card>
-                                    <Card.Title className="text-center mt-4">Cover back</Card.Title>
+                                    <Card.Title className="mt-4">Cover Back</Card.Title>
                                     <Card.Body>                                        
-                                        {<img alt="" src={ ApiConfig.PHOTO_PATH + 'thumb/2020822-8652156860-blank.jpg' } className="w-100"/> } 
-                                    <Card.Text className="text-center">no cover to show.</Card.Text>
+                                        {   this.state.book?.photos[1] ? <img alt="Back cover" src={ ApiConfig.PHOTO_PATH + 'small/' + this.state.book?.photos[1].imagePath } className="w-100"/> : <Card.Text>No back cover to show</Card.Text>
+                                            } 
+                                    
                                     </Card.Body>                                    
                                 </Card>
                             </Col>                           

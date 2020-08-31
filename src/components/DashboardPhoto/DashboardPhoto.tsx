@@ -1,13 +1,13 @@
 import React from 'react';
 import { Container, Card, Row, Col, Nav, Form, Button, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImages, faBackward, faPlus, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faImages, faBackward, faPlus, faSave, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 import api, { ApiResponse, apiFile } from '../../api/api';
 import PhotoType from '../../types/PhotoType';
 import { ApiConfig } from '../../config/api.config';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import ApiPhotoDto from '../../dtos/ApiPhotoDto';
 
 
@@ -82,6 +82,9 @@ class DashboardPhoto extends React.Component<DashboardPhotoProperties> {
     } 
     
     render () {
+        if (this.state.isUserLoggedIn === false) {
+            return ( <Redirect to="/login" />);
+        }
         return (
             <Container>
                 <RoledMainMenu role="user" />
@@ -169,15 +172,15 @@ class DashboardPhoto extends React.Component<DashboardPhotoProperties> {
 
         const file = filePhoto.files[0];
             
-        await this.uploadBookPhoto(this.props.match.params.bookId, file);
+        await this.uploadBookPhoto(this.props.match.params.bookId, file, this.state.addModal.photo.cover);
 
         this.getPhotos();
     }
 
-    private async uploadBookPhoto(bookId: number, file: File) {
+    private async uploadBookPhoto(bookId: number, file: File, cover: string) { // --------add-----------
         
         
-        return await apiFile('api/book/' + bookId + '/uploadPhoto/', 'photo', file);
+        return await apiFile('api/book/' + bookId + '/uploadPhoto/' + cover, 'photo', file);  //--------add-----------
     }
 
     private setAddModalStringFieldState(fieldName: string, newValue: string) {
@@ -210,11 +213,25 @@ class DashboardPhoto extends React.Component<DashboardPhotoProperties> {
                              className="w-100" />
                     </Card.Body>
                     <Card.Footer>
-                        
+                        <Button variant="danger" block onClick={ () => this.deletePhoto(photo.photoId) } >
+                            <FontAwesomeIcon icon={ faMinus } /> Delete photo
+                        </Button>
                     </Card.Footer>
                 </Card>
             </Col>
         )
+    }
+
+    private deletePhoto(photoId: number) {
+        api('api/book/' + this.props.match.params.bookId + '/deletePhoto/' + photoId + '/', 'delete', {} )
+        .then((res: ApiResponse) => {
+            if (res.status === 'error' || res.status === 'login') {
+                this.setLoggedInState(false);
+                return;
+            }
+
+            this.getPhotos();
+        })
     }
     
 }
