@@ -208,7 +208,7 @@ class DashboardCategory extends React.Component {
                                           type="text" 
                                           value={ this.state.addModal.name } 
                                           onChange={ (e) => this.setAddModalStringFieldState('name', e.target.value) } >
-                            </Form.Control>.
+                            </Form.Control>
                         </Form.Group>
 
                         <Form.Group>
@@ -236,7 +236,7 @@ class DashboardCategory extends React.Component {
                                           type="text" 
                                           value={ this.state.editModal.name } 
                                           onChange={ (e) => this.setEditModalStringFieldState('name', e.target.value) } >
-                            </Form.Control>.
+                            </Form.Control>
                         </Form.Group>
 
                         <Form.Group>

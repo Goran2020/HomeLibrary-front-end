@@ -849,7 +849,7 @@ class DashboardBook extends React.Component {
                     onChange= { (e) => this.setAddModalAuthorUse(author.authorId, e.target.checked) } />
                 </Col>
                 <Col xs="10" sm="4">
-                    { author.forename + " " + author.surname + " " + author.use}
+                    { author.forename + " " + author.surname}
                 </Col>
                 
             </Row>           

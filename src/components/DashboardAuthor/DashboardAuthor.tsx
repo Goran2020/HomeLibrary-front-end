@@ -224,7 +224,7 @@ class DashboardAuthor extends React.Component {
                                           type="text" 
                                           value={ this.state.addModal.forename } 
                                           onChange={ (e) => this.setAddModalStringFieldState('forename', e.target.value) } >
-                            </Form.Control>.
+                            </Form.Control>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label htmlFor="surname">Surname</Form.Label>
@@ -232,7 +232,7 @@ class DashboardAuthor extends React.Component {
                                           type="text" 
                                           value={ this.state.addModal.surname } 
                                           onChange={ (e) => this.setAddModalStringFieldState('surname', e.target.value) } >
-                            </Form.Control>.
+                            </Form.Control>
                         </Form.Group>
 
                         <Form.Group>
@@ -261,7 +261,7 @@ class DashboardAuthor extends React.Component {
                                           type="text" 
                                           value={ this.state.editModal.forename } 
                                           onChange={ (e) => this.setEditModalStringFieldState('forename', e.target.value) } >
-                            </Form.Control>.
+                            </Form.Control>
                         </Form.Group>
 
                         <Form.Group>
@@ -270,7 +270,7 @@ class DashboardAuthor extends React.Component {
                                           type="text" 
                                           value={ this.state.editModal.surname } 
                                           onChange={ (e) => this.setEditModalStringFieldState('surname', e.target.value) } >
-                            </Form.Control>.
+                            </Form.Control>
                         </Form.Group>
 
                         <Form.Group>

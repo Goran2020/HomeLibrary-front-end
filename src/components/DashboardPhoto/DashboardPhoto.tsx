@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Card, Row, Col, Nav, Form, Button, Modal } from 'react-bootstrap';
+import { Container, Card, Row, Col, Nav, Form, Button, Modal, Alert } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImages, faBackward, faPlus, faSave, faMinus } from '@fortawesome/free-solid-svg-icons';
 
@@ -26,6 +26,7 @@ interface DashboardPhotoState {
     addModal: {
         visible: boolean;
         photo: ApiPhotoDto;
+        errorMessage: string;
     }
 }
 
@@ -42,6 +43,7 @@ class DashboardPhoto extends React.Component<DashboardPhotoProperties> {
             photo: {
                 cover: 'back'
             },
+            errorMessage: '',
         }              
       }
     }
@@ -157,6 +159,10 @@ class DashboardPhoto extends React.Component<DashboardPhotoProperties> {
                                 <FontAwesomeIcon icon={ faSave } /> Upload photo 
                             </Button>
                         </Form.Group>
+                        <Alert variant="danger"
+                                   className={ this.state.addModal.errorMessage ? '' : 'd-none' }>
+                                { this.state.addModal.errorMessage }
+                            </Alert>
                     </Modal.Body>
                 </Modal>
             </Container>
@@ -166,7 +172,12 @@ class DashboardPhoto extends React.Component<DashboardPhotoProperties> {
     private async doUploadPhoto() {
         const filePhoto: any = document.getElementById('photo');
         if (filePhoto.files.length === 0) {
-            this.setAddModalStringFieldState('message', 'Please select a photo to upload.');
+            this.setState(Object.assign(this.state,
+                Object.assign(this.state.addModal, {
+                    errorMessage: 'Please select a photo to upload.',
+                }),
+            ));
+            
             return;
         }
 
@@ -223,6 +234,9 @@ class DashboardPhoto extends React.Component<DashboardPhotoProperties> {
     }
 
     private deletePhoto(photoId: number) {
+        if (!window.confirm('Are you shure you want to delete this photo?')) {
+            return;
+        }
         api('api/book/' + this.props.match.params.bookId + '/deletePhoto/' + photoId + '/', 'delete', {} )
         .then((res: ApiResponse) => {
             if (res.status === 'error' || res.status === 'login') {

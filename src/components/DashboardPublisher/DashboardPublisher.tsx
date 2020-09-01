@@ -230,7 +230,7 @@ class DashboardPublisher extends React.Component {
                                           type="text" 
                                           value={ this.state.addModal.name } 
                                           onChange={ (e) => this.setAddModalStringFieldState('name', e.target.value) } >
-                            </Form.Control>.
+                            </Form.Control>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label htmlFor="city">City</Form.Label>
@@ -238,7 +238,7 @@ class DashboardPublisher extends React.Component {
                                           type="text" 
                                           value={ this.state.addModal.city } 
                                           onChange={ (e) => this.setAddModalStringFieldState('city', e.target.value) } >
-                            </Form.Control>.
+                            </Form.Control>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label htmlFor="state">State</Form.Label>
@@ -246,7 +246,7 @@ class DashboardPublisher extends React.Component {
                                           type="text" 
                                           value={ this.state.addModal.state } 
                                           onChange={ (e) => this.setAddModalStringFieldState('state', e.target.value) } >
-                            </Form.Control>.
+                            </Form.Control>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label htmlFor="foundedIn">Founded In</Form.Label>
@@ -254,7 +254,7 @@ class DashboardPublisher extends React.Component {
                                           type="text" 
                                           value={ this.state.addModal.foundedIn } 
                                           onChange={ (e) => this.setAddModalStringFieldState('foundedIn', e.target.value) } >
-                            </Form.Control>.
+                            </Form.Control>
                         </Form.Group>
                         <Form.Group>
                             <Button variant="primary" onClick= { () => this.doAddPublisher() }>
@@ -282,7 +282,7 @@ class DashboardPublisher extends React.Component {
                                           type="text" 
                                           value={ this.state.editModal.name } 
                                           onChange={ (e) => this.setEditModalStringFieldState('name', e.target.value) } >
-                            </Form.Control>.
+                            </Form.Control>
                         </Form.Group>
 
                         <Form.Group>
@@ -291,7 +291,7 @@ class DashboardPublisher extends React.Component {
                                           type="text" 
                                           value={ this.state.editModal.city } 
                                           onChange={ (e) => this.setEditModalStringFieldState('city', e.target.value) } >
-                            </Form.Control>.
+                            </Form.Control>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label htmlFor="state">State</Form.Label>
@@ -299,7 +299,7 @@ class DashboardPublisher extends React.Component {
                                           type="text" 
                                           value={ this.state.editModal.state } 
                                           onChange={ (e) => this.setEditModalStringFieldState('state', e.target.value) } >
-                            </Form.Control>.
+                            </Form.Control>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label htmlFor="foundedIn">Founded In</Form.Label>
@@ -307,7 +307,7 @@ class DashboardPublisher extends React.Component {
                                           type="text" 
                                           value={ this.state.editModal.foundedIn } 
                                           onChange={ (e) => this.setEditModalStringFieldState('foundedIn', e.target.value) } >
-                            </Form.Control>.
+                            </Form.Control>
                         </Form.Group>
 
                         <Form.Group>

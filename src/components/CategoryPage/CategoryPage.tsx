@@ -348,28 +348,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
             <BookPreview book={book} />
         );
     }
-    /*
-    private singleBook(book: BookType) {
-        return (
-            <Col xs="12" sm="6" md="6" lg="4">
-                <Card className="mt-3">
-                    
-                    <Card.Body>
-                        <Card.Title as="p">
-                            <strong>
-                                { book.title }
-                            </strong>
-                        </Card.Title>
-                                   
-                        <Link to={`/book/${book.bookId}/`}
-                            className="btn btn-sm btn-primary btn-block">
-                            Click to open
-                        </Link>
-                    </Card.Body>
-                </Card>
-            </Col>
-        );
-    }  */
+
 
     private showBooks() {
         if (this.state.books?.length === 0) {
