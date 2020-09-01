@@ -19,8 +19,7 @@ interface CategoryPageProperties {
     }
 }
 
-interface CategoryPageState {
-    //isUserLoggedIn?: boolean;
+interface CategoryPageState {    
     category?: CategoryType;
     books?: BookType[];
     title?: string;
@@ -36,7 +35,7 @@ interface CategoryPageState {
         title: string;
         publicationYear: number | null;
         authorId: number;        
-        order: "title asc" | "title desc" | "authors acs";
+        order: "title asc" | "title desc" | "year asc" | "year desc";
     };
 }
 
@@ -64,8 +63,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
     constructor(props: Readonly<CategoryPageProperties>) {
         super(props);
 
-        this.state = {
-            //isUserLoggedIn: true,
+        this.state = {            
             message: '',
             books: [],
             authors: [],                  
@@ -81,11 +79,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
     };   
 
     render() {
-    /*    if (this.state.isUserLoggedIn === false) {        
-            return (
-                <Redirect to="/login" />
-            );
-        } */
+    
         return (
             <Container>
                 <RoledMainMenu role='visitor' />
@@ -206,25 +200,7 @@ export default class CategoryPage extends React.Component<CategoryPageProperties
                                                 ) ) }
                                     </Form.Control>
                                 </Form.Group>
-                       </Col>
-                       
-                       {/* 
-                        <Col xs="12" sm="12">
-                            <Form.Label htmlFor="forename">Forename</Form.Label> <FontAwesomeIcon icon={ faSearch } />
-                           <Form.Control type="text" 
-                                         id="forename" 
-                                         value={ this.state.filters?.forename } 
-                                         onChange={ (e) => this.filterForenameChange(e as any) } />
-                       </Col>
-                       <Col xs="12" sm="12">
-                            <Form.Label htmlFor="surname">Surname</Form.Label> <FontAwesomeIcon icon={ faSearch } />
-                           <Form.Control type="text" 
-                                         id="surname" 
-                                         value={ this.state.filters?.surname } 
-                                         onChange={ (e) => this.filterSurnameChange(e as any) } />
-                       </Col>
-                       */}
-                       
+                       </Col>                       
                    </Row>
                </Form.Group>
                <Form.Group>

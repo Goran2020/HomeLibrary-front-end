@@ -16,8 +16,7 @@ interface BookPageProperties {
         }
     }
 }
-interface BookPageState {
-    //isUserLoggedIn: boolean;
+interface BookPageState {    
     message: string;
     book?: ApiBookDto;
 }
@@ -28,8 +27,7 @@ export default class BookPage extends React.Component<BookPageProperties> {
     constructor(props: Readonly<BookPageProperties>) {
         super(props);
 
-        this.state = {
-            //isUserLoggedIn: true,
+        this.state = {            
             message: '',
             book: undefined
 
@@ -52,12 +50,7 @@ export default class BookPage extends React.Component<BookPageProperties> {
     }
 
     render() {
-        /*
-        if (this.state.isUserLoggedIn === false) {        
-            return (
-                <Redirect to="/login" />
-            );
-        }  */
+        
         return (
             <Container>
                 <RoledMainMenu role='visitor' />
@@ -140,18 +133,13 @@ export default class BookPage extends React.Component<BookPageProperties> {
     private getBookData() {
         api('visitor/book/' + this.props.match.params.bookId, 'get', {})
         .then((res: ApiResponse) => {
-            /*
-            if (res.status === 'login') {
-                return this.setLoggedInState(false);				
-            }*/
-            
+                        
             if (res.status === 'error') {
                 return this.setMessage("This book doesn't exist.");
                 
             } 
 
-            const data: ApiBookDto = res.data;
-            console.log(data);
+            const data: ApiBookDto = res.data;            
             this.setBookData(data);
         })
     }

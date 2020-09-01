@@ -130,8 +130,7 @@ class DashboardPhoto extends React.Component<DashboardPhotoProperties> {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form.Group>  {/* PHOTO   */ }
-                        { console.log(this.state.addModal.photo.cover) }
+                        <Form.Group>  {/* PHOTO   */ }                        
                             <Form.Label htmlFor="cover">Book cover</Form.Label>
                                 <Form.Control id="cover" 
                                             as="select" 

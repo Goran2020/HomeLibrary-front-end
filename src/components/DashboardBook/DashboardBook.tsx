@@ -403,8 +403,7 @@ class DashboardBook extends React.Component {
             if (res.status === 'error' || res.status === 'login') {
 				this.setLoggedInState(false);
 				return;
-			}
-            console.log(res.data);
+			}            
             this.putAuthorsInState(res.data);            
             
             return res.data;

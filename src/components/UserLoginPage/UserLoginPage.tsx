@@ -80,8 +80,7 @@ export default class UserLoginPage extends React.Component {
                 this.setErrorMessage('Something went wrong...');
                 return;
             }
-            console.log(res.status);
-            console.log(res.data);
+            
             if (res.data.statusCode !== undefined) {
                 switch (res.data.statusCode) {
                     case -8006: this.setErrorMessage('You have entered an invalid username!'); break;
@@ -104,7 +103,7 @@ export default class UserLoginPage extends React.Component {
 
     render() {
         if (this.state.isLoggedIn === true) {
-            console.log("Uspešan login");
+            
             return (
                 <Redirect to="/dashboard/" />
             );
